@@ -30,27 +30,27 @@
 flowchart TD
     User(["Developer / Recruiter"]) --> WebApp["Next.js App Router Client"]
     
-    subgraph Frontend ["Frontend Layer (React 19 + Tailwind v4)"]
+    subgraph Frontend["Frontend Layer - React 19 & Tailwind v4"]
         WebApp --> Header["Header & Search / Theme Toggle"]
         WebApp --> Tabs["Feature Tabs Navigation"]
-        Tabs --> DashView["Analytics & Charts (Recharts)"]
+        Tabs --> DashView["Analytics & Recharts Visualizations"]
         Tabs --> RepoView["Repository Explorer & Filters"]
         Tabs --> HealthView["Health Analyzer & Recommendations"]
         Tabs --> CopilotView["AI Career Copilot Sub-tools"]
         Tabs --> CardView["README Card Live Customizer"]
     end
 
-    subgraph Backend ["Server-side APIs (Next.js Edge/Node runtime)"]
+    subgraph Backend["Server-side APIs - Next.js App Router"]
         DashView --> RouteGithub["/api/github/:username"]
         CardView --> RouteCards["/api/cards/stats & /api/cards/languages"]
         CopilotView --> RouteCopilot["/api/ai/copilot"]
         
         RouteGithub --> GithubService["GitHub Service & TTL Cache"]
-        RouteCopilot --> AIService["AI Engine (Gemini / OpenAI)"]
+        RouteCopilot --> AIService["AI Engine - Gemini & OpenAI"]
         RouteCards --> SVGGenerator["Dynamic SVG Generator"]
     end
 
-    subgraph External ["External Services"]
+    subgraph External["External Cloud Services"]
         GithubService --> GitHubAPI[("GitHub REST API v3")]
         AIService --> GeminiAPI[("Google Gemini API")]
         AIService --> OpenAIAPI[("OpenAI API Fallback")]
