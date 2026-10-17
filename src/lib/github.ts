@@ -130,6 +130,8 @@ export async function fetchGitHubDashboardData(
     if (cached && Date.now() < cached.expiresAt) {
       return { data: cached.data };
     }
+  } else {
+    cache.delete(normalizedUser);
   }
 
   // Check if requested demo profile directly
@@ -138,12 +140,15 @@ export async function fetchGitHubDashboardData(
   }
 
   const headers = getRequestHeaders();
+  const fetchOptions: RequestInit = forceRefresh
+    ? { cache: 'no-store' }
+    : { next: { revalidate: 600 } };
 
   try {
     // 1. Fetch user profile
     const userRes = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`, {
       headers,
-      next: { revalidate: 600 },
+      ...fetchOptions,
     });
 
     const rateLimit = parseRateLimitHeaders(userRes.headers);
@@ -180,7 +185,7 @@ export async function fetchGitHubDashboardData(
     // 2. Fetch public repositories (up to 100 most recently updated)
     const reposRes = await fetch(
       `https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`,
-      { headers, next: { revalidate: 600 } }
+      { headers, ...fetchOptions }
     );
     let repos: GitHubRepo[] = [];
     if (reposRes.ok) {
@@ -198,7 +203,10 @@ export async function fetchGitHubDashboardData(
     // 3. Fetch public events
     const eventsRes = await fetch(
       `https://api.github.com/users/${encodeURIComponent(username)}/events/public?per_page=60`,
-      { headers, next: { revalidate: 300 } }
+      {
+        headers,
+        ...(forceRefresh ? { cache: 'no-store' } : { next: { revalidate: 300 } }),
+      }
     );
     let recentEvents: GitHubEvent[] = [];
     if (eventsRes.ok) {

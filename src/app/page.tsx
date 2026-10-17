@@ -65,7 +65,8 @@ export default function Home() {
   }, [fetchProfile]);
 
   const handleSearch = (searchedUsername: string) => {
-    fetchProfile(searchedUsername);
+    const isSameUser = searchedUsername.trim().toLowerCase() === username.trim().toLowerCase();
+    fetchProfile(searchedUsername, isSameUser);
   };
 
   const handleSelectRepoForAI = (repoName: string) => {
@@ -160,7 +161,11 @@ export default function Home() {
             />
 
             {/* Profile Hero Header */}
-            <ProfileHero user={data.user} />
+            <ProfileHero
+              user={data.user}
+              onRefresh={() => fetchProfile(username, true)}
+              isRefreshing={loading}
+            />
 
             {/* Main Feature Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">

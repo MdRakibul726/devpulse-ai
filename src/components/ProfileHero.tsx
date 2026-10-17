@@ -13,6 +13,7 @@ import {
   Copy,
   Check,
   FolderGit2,
+  RefreshCw,
 } from 'lucide-react';
 import { GitHubUser } from '@/lib/schemas';
 import { formatDate, formatNumber } from '@/lib/utils';
@@ -21,9 +22,11 @@ import { Badge } from './ui/badge';
 
 interface ProfileHeroProps {
   user: GitHubUser;
+  onRefresh?: () => void;
+  isRefreshing?: boolean;
 }
 
-export function ProfileHero({ user }: ProfileHeroProps) {
+export function ProfileHero({ user, onRefresh, isRefreshing }: ProfileHeroProps) {
   const [copied, setCopied] = useState(false);
 
   const handleCopyLink = () => {
@@ -132,6 +135,19 @@ export function ProfileHero({ user }: ProfileHeroProps) {
         {/* Action Buttons & Social Stats */}
         <div className="flex flex-col sm:flex-row md:flex-col items-stretch sm:items-center md:items-end gap-3 w-full md:w-auto">
           <div className="flex items-center gap-2">
+            {onRefresh && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={onRefresh}
+                disabled={isRefreshing}
+                className="gap-1.5 text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 hover:bg-indigo-50 dark:hover:bg-indigo-950/40"
+                title="Sync latest live data from GitHub API"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span>{isRefreshing ? 'Syncing...' : 'Sync'}</span>
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"
