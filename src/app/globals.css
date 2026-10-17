@@ -3,13 +3,19 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --background: #fafafa;
+  --background: #f8fafc;
   --foreground: #09090b;
+  --card: rgba(255, 255, 255, 0.85);
+  --card-border: rgba(226, 232, 240, 0.8);
+  --accent-glow: rgba(99, 102, 241, 0.12);
 }
 
 .dark {
-  --background: #090b10;
-  --foreground: #f4f4f5;
+  --background: #08090d;
+  --foreground: #f8fafc;
+  --card: rgba(13, 16, 25, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --accent-glow: rgba(99, 102, 241, 0.22);
 }
 
 @theme inline {
@@ -19,11 +25,135 @@
   --font-mono: var(--font-geist-mono);
 }
 
+* {
+  border-color: var(--card-border);
+}
+
+html {
+  color-scheme: light dark;
+}
+
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  font-family: var(--font-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-x: hidden;
+}
+
+/* Luxury Ambient Background Glow & Micro Grid */
+.bg-ambient-mesh {
+  background-image: 
+    radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.14) 0%, transparent 50%),
+    radial-gradient(circle at 85% 15%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 15% 25%, rgba(168, 85, 247, 0.08) 0%, transparent 40%);
+}
+
+.dark .bg-ambient-mesh {
+  background-image: 
+    radial-gradient(circle at 50% -10%, rgba(99, 102, 241, 0.20) 0%, transparent 60%),
+    radial-gradient(circle at 90% 10%, rgba(6, 182, 212, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 10% 25%, rgba(139, 92, 246, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 60%, rgba(99, 102, 241, 0.04) 0%, transparent 50%);
+}
+
+/* Subtle Tech Grid Pattern */
+.bg-grid-subtle {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+}
+
+.dark .bg-grid-subtle {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+/* Glass Card & Specular Top Highlight */
+.glass-panel {
+  background: var(--card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.dark .glass-panel {
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  pointer-events: none;
+}
+
+.glass-card-hover {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.35);
+  box-shadow: 0 12px 30px -4px rgba(99, 102, 241, 0.12);
+}
+
+/* Pulsing AI Glow animation */
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s infinite ease-in-out;
+}
+
+/* Selection Color */
+::selection {
+  background-color: #6366f1;
+  color: #ffffff;
 }
 
 /* Style Next.js DevTools indicator button to match DevPulse AI icon */
@@ -41,3 +171,4 @@ button[aria-label*="DevTools"],
 nextjs-portal svg path {
   fill: white !important;
 }
+

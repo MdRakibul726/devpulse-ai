@@ -69,17 +69,17 @@ export function RateLimitBanner({ rateLimit, isDemo, onSwitchToDemo }: RateLimit
   }
 
   return (
-    <div className="flex items-center justify-between px-3 py-1.5 rounded-lg border border-zinc-200/60 dark:border-zinc-800/60 bg-zinc-50/50 dark:bg-zinc-900/40 text-[11px] text-zinc-500 dark:text-zinc-400 mb-6">
-      <div className="flex items-center gap-2">
+    <div className="glass-panel rounded-2xl px-4 py-2 text-xs text-zinc-500 dark:text-zinc-400 mb-6 flex items-center justify-between shadow-xs border border-zinc-200/80 dark:border-white/[0.06]">
+      <div className="flex items-center gap-2.5">
         <span className="flex h-2 w-2 relative">
           <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isLow ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
           <span className={`relative inline-flex rounded-full h-2 w-2 ${isLow ? 'bg-amber-500' : 'bg-emerald-500'}`}></span>
         </span>
-        <span>
-          GitHub API Quota: <strong className="text-zinc-700 dark:text-zinc-300">{rateLimit.remaining}</strong> / {rateLimit.limit} remaining
+        <span className="font-medium">
+          GitHub API Quota: <strong className="text-zinc-900 dark:text-white font-mono font-semibold">{rateLimit.remaining}</strong> / <span className="font-mono">{rateLimit.limit}</span> remaining
         </span>
       </div>
-      <div className="hidden sm:flex items-center gap-2">
+      <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-zinc-400">
         <span>Resets at: {rateLimit.resetDate}</span>
       </div>
     </div>

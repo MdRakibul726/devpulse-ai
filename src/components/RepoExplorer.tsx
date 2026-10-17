@@ -76,28 +76,28 @@ export function RepoExplorer({
   return (
     <div className="space-y-4">
       {/* Controls Bar */}
-      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-white/60 dark:bg-zinc-900/40 backdrop-blur-md">
+      <div className="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3.5 shadow-sm">
         {/* Search */}
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Filter repositories..."
-            className="w-full h-9 pl-9 pr-3 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+            placeholder="Search repositories, topics, or descriptions..."
+            className="w-full h-10 pl-10 pr-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-zinc-900/80 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 shadow-xs"
           />
         </div>
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Language filter */}
-          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-            <Filter className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+            <Filter className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="h-9 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              className="h-10 px-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-zinc-900/80 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer shadow-xs"
             >
               {availableLanguages.map((lang) => (
                 <option key={lang} value={lang}>
@@ -108,12 +108,12 @@ export function RepoExplorer({
           </div>
 
           {/* Sort By */}
-          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-            <ArrowUpDown className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+            <ArrowUpDown className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="h-9 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
+              className="h-10 px-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-zinc-900/80 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer shadow-xs"
             >
               <option value="stars">Most Stars</option>
               <option value="forks">Most Forks</option>
@@ -122,12 +122,12 @@ export function RepoExplorer({
           </div>
 
           {/* Hide Forks Checkbox */}
-          <label className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400 cursor-pointer select-none ml-1">
+          <label className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400 font-medium cursor-pointer select-none ml-1 px-2.5 py-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
             <input
               type="checkbox"
               checked={hideForks}
               onChange={(e) => setHideForks(e.target.checked)}
-              className="rounded border-zinc-300 dark:border-zinc-700 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5"
+              className="rounded-md border-zinc-300 dark:border-zinc-700 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5 cursor-pointer"
             />
             <span>Hide forks</span>
           </label>

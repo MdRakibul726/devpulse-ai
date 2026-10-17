@@ -75,26 +75,26 @@ export function ActivityTimeline({ activity }: ActivityTimelineProps) {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload as ActivityPoint;
                       return (
-                        <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95 p-3 shadow-md text-xs backdrop-blur-sm">
-                          <div className="font-semibold text-zinc-900 dark:text-zinc-100 border-b border-zinc-200 dark:border-zinc-800 pb-1 mb-1.5">
+                        <div className="rounded-2xl border border-zinc-200/90 dark:border-white/10 bg-white/95 dark:bg-[#0c0e17]/95 p-3.5 shadow-2xl text-xs backdrop-blur-xl ring-1 ring-black/5 min-w-[170px]">
+                          <div className="font-bold text-zinc-900 dark:text-zinc-100 border-b border-zinc-100 dark:border-white/[0.08] pb-1.5 mb-2">
                             Activity on {label}
                           </div>
-                          <div className="space-y-1">
+                          <div className="space-y-1.5">
                             <div className="flex items-center justify-between gap-4 text-indigo-500">
-                              <span>Commits:</span>
-                              <strong className="font-mono">{data.commits}</strong>
+                              <span className="font-medium">Commits:</span>
+                              <strong className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{data.commits}</strong>
                             </div>
                             <div className="flex items-center justify-between gap-4 text-emerald-500">
-                              <span>Pull Requests:</span>
-                              <strong className="font-mono">{data.pullRequests}</strong>
+                              <span className="font-medium">Pull Requests:</span>
+                              <strong className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{data.pullRequests}</strong>
                             </div>
                             <div className="flex items-center justify-between gap-4 text-amber-500">
-                              <span>Issues:</span>
-                              <strong className="font-mono">{data.issues}</strong>
+                              <span className="font-medium">Issues:</span>
+                              <strong className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{data.issues}</strong>
                             </div>
-                            <div className="border-t border-zinc-200 dark:border-zinc-800 pt-1 flex items-center justify-between gap-4 text-zinc-800 dark:text-zinc-200 font-bold">
-                              <span>Total:</span>
-                              <strong className="font-mono">{data.total}</strong>
+                            <div className="border-t border-zinc-100 dark:border-white/[0.08] pt-1.5 flex items-center justify-between gap-4 text-zinc-900 dark:text-white font-bold">
+                              <span>Total Events:</span>
+                              <strong className="font-mono font-bold text-indigo-500">{data.total}</strong>
                             </div>
                           </div>
                         </div>

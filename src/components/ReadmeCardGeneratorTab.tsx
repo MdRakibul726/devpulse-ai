@@ -153,39 +153,53 @@ export function ReadmeCardGeneratorTab({ username }: ReadmeCardGeneratorTabProps
           {/* Embed Snippets */}
           <div className="space-y-4">
             {/* Markdown */}
-            <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden bg-zinc-950 text-zinc-100">
-              <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs">
-                <span className="font-semibold text-zinc-300">Markdown (For GitHub Profile README)</span>
+            <div className="rounded-2xl border border-zinc-200/90 dark:border-white/[0.08] overflow-hidden bg-[#0c0e17] text-zinc-100 shadow-lg">
+              <div className="flex items-center justify-between px-4 py-2.5 bg-[#121522] border-b border-white/[0.08] text-xs">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 mr-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
+                  </div>
+                  <span className="font-semibold text-zinc-300">Markdown — GitHub Profile README</span>
+                </div>
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="h-7 text-xs text-zinc-300 hover:text-white gap-1.5"
+                  className="h-7 text-xs text-zinc-300 hover:text-white hover:bg-white/10 gap-1.5 rounded-lg cursor-pointer"
                   onClick={() => handleCopy(markdownSnippet, 'markdown')}
                 >
                   {copiedType === 'markdown' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedType === 'markdown' ? 'Copied' : 'Copy Markdown'}</span>
+                  <span>{copiedType === 'markdown' ? 'Copied Snippet' : 'Copy Markdown'}</span>
                 </Button>
               </div>
-              <pre className="p-3.5 font-mono text-xs text-zinc-300 overflow-x-auto">
+              <pre className="p-4 font-mono text-xs text-indigo-300 overflow-x-auto selection:bg-indigo-500 selection:text-white">
                 {markdownSnippet}
               </pre>
             </div>
 
             {/* HTML */}
-            <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden bg-zinc-950 text-zinc-100">
-              <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 border-b border-zinc-800 text-xs">
-                <span className="font-semibold text-zinc-300">HTML (For Portfolio / Website Embed)</span>
+            <div className="rounded-2xl border border-zinc-200/90 dark:border-white/[0.08] overflow-hidden bg-[#0c0e17] text-zinc-100 shadow-lg">
+              <div className="flex items-center justify-between px-4 py-2.5 bg-[#121522] border-b border-white/[0.08] text-xs">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 mr-2">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500/70" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/70" />
+                  </div>
+                  <span className="font-semibold text-zinc-300">HTML — Portfolio & Website Embed</span>
+                </div>
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="h-7 text-xs text-zinc-300 hover:text-white gap-1.5"
+                  className="h-7 text-xs text-zinc-300 hover:text-white hover:bg-white/10 gap-1.5 rounded-lg cursor-pointer"
                   onClick={() => handleCopy(htmlSnippet, 'html')}
                 >
                   {copiedType === 'html' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedType === 'html' ? 'Copied' : 'Copy HTML'}</span>
+                  <span>{copiedType === 'html' ? 'Copied Snippet' : 'Copy HTML'}</span>
                 </Button>
               </div>
-              <pre className="p-3.5 font-mono text-xs text-zinc-300 overflow-x-auto">
+              <pre className="p-4 font-mono text-xs text-cyan-300 overflow-x-auto selection:bg-indigo-500 selection:text-white">
                 {htmlSnippet}
               </pre>
             </div>

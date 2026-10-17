@@ -38,7 +38,7 @@ export function TabsList({ className, children }: { className?: string; children
   return (
     <div
       className={cn(
-        'inline-flex h-11 items-center justify-start rounded-xl bg-zinc-100 dark:bg-zinc-900/80 p-1 text-zinc-500 dark:text-zinc-400 border border-zinc-200/60 dark:border-zinc-800/60 backdrop-blur-sm overflow-x-auto max-w-full',
+        'inline-flex h-12 items-center justify-start rounded-2xl bg-white/70 dark:bg-zinc-900/70 p-1.5 text-zinc-500 dark:text-zinc-400 border border-zinc-200/80 dark:border-white/[0.08] backdrop-blur-xl shadow-sm overflow-x-auto max-w-full gap-1',
         className
       )}
     >
@@ -67,15 +67,15 @@ export function TabsTrigger({
       type="button"
       onClick={() => ctx.onValueChange(value)}
       className={cn(
-        'inline-flex items-center justify-center whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-50 gap-2',
+        'inline-flex items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-xs font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-50 gap-2 cursor-pointer select-none',
         isActive
-          ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-zinc-50 shadow-sm font-semibold'
-          : 'hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/40',
+          ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-md shadow-zinc-950/5 dark:shadow-indigo-500/10 font-semibold border border-zinc-200/80 dark:border-white/10 scale-[1.02]'
+          : 'hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50',
         className
       )}
     >
-      {icon && <span className="w-4 h-4">{icon}</span>}
-      {children}
+      {icon && <span className="w-4 h-4 shrink-0 transition-transform group-hover:scale-110">{icon}</span>}
+      <span>{children}</span>
     </button>
   );
 }

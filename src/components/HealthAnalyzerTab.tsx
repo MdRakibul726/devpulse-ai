@@ -64,54 +64,54 @@ export function HealthAnalyzerTab({ repos, highlightRepo }: HealthAnalyzerTabPro
             <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">
               Health Index
             </span>
-            <Badge variant={statusConfig.badge}>{report.overallStatus}</Badge>
+            <Badge variant={statusConfig.badge} className="px-3 py-1 font-semibold">{report.overallStatus}</Badge>
           </div>
 
-          <div className="my-4 flex items-center gap-5">
-            <div className="relative flex items-center justify-center">
-              <svg className="w-24 h-24 transform -rotate-90">
+          <div className="my-5 flex items-center gap-6">
+            <div className="relative flex items-center justify-center shrink-0">
+              <svg className="w-28 h-28 transform -rotate-90">
                 <circle
-                  cx="48"
-                  cy="48"
-                  r="38"
+                  cx="56"
+                  cy="56"
+                  r="44"
                   stroke="currentColor"
                   strokeWidth="8"
                   fill="transparent"
-                  className="text-zinc-200 dark:text-zinc-800"
+                  className="text-zinc-200 dark:text-zinc-800/80"
                 />
                 <circle
-                  cx="48"
-                  cy="48"
-                  r="38"
+                  cx="56"
+                  cy="56"
+                  r="44"
                   stroke="currentColor"
                   strokeWidth="8"
                   fill="transparent"
-                  strokeDasharray={2 * Math.PI * 38}
-                  strokeDashoffset={2 * Math.PI * 38 * (1 - report.score / 100)}
+                  strokeDasharray={2 * Math.PI * 44}
+                  strokeDashoffset={2 * Math.PI * 44 * (1 - report.score / 100)}
                   strokeLinecap="round"
-                  className={statusConfig.color}
+                  className={`${statusConfig.color} transition-all duration-1000 ease-out`}
                 />
               </svg>
               <div className="absolute flex flex-col items-center justify-center">
-                <span className="text-2xl font-bold text-zinc-900 dark:text-zinc-50 font-mono">
+                <span className="text-3xl font-extrabold text-zinc-950 dark:text-white font-mono tracking-tight">
                   {report.score}
                 </span>
-                <span className="text-[10px] text-zinc-400">/ 100</span>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-zinc-400">/ 100</span>
               </div>
             </div>
 
             <div>
-              <h4 className="text-base font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-                <StatusIcon className={`w-4 h-4 ${statusConfig.color}`} />
+              <h4 className="text-lg font-bold text-zinc-950 dark:text-zinc-50 flex items-center gap-2">
+                <StatusIcon className={`w-5 h-5 ${statusConfig.color}`} />
                 {report.overallStatus}
               </h4>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 leading-snug">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1.5 leading-relaxed font-normal">
                 {statusConfig.description}
               </p>
             </div>
           </div>
 
-          <p className="text-[11px] text-zinc-400">
+          <p className="text-[11px] text-zinc-400 font-medium">
             Based on {report.totalReposAnalyzed} original repositories (excluding upstream forks)
           </p>
         </Card>
@@ -119,13 +119,13 @@ export function HealthAnalyzerTab({ repos, highlightRepo }: HealthAnalyzerTabPro
         {/* Actionable Recommendations Summary */}
         <Card className="md:col-span-2 p-6 flex flex-col justify-between">
           <div>
-            <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-2 mb-2">
               <Sparkles className="w-4 h-4 text-indigo-500" />
-              <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
+              <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
                 Actionable Improvements
               </h3>
             </div>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-4 font-normal">
               Specific, evidence-based recommendations to elevate your GitHub portfolio visibility to recruiters and engineering managers:
             </p>
 
@@ -133,35 +133,35 @@ export function HealthAnalyzerTab({ repos, highlightRepo }: HealthAnalyzerTabPro
               {report.actionableRecommendations.map((rec, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-2.5 text-xs text-zinc-700 dark:text-zinc-300 bg-zinc-50 dark:bg-zinc-800/40 p-2.5 rounded-lg border border-zinc-200/50 dark:border-zinc-700/50"
+                  className="flex items-start gap-2.5 text-xs text-zinc-700 dark:text-zinc-200 bg-zinc-50/80 dark:bg-white/[0.03] p-3 rounded-xl border border-zinc-200/60 dark:border-white/[0.06] hover:border-indigo-500/30 transition-colors"
                 >
-                  <ArrowRight className="w-3.5 h-3.5 text-indigo-500 shrink-0 mt-0.5" />
-                  <span>{rec}</span>
+                  <ArrowRight className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                  <span className="font-medium leading-relaxed">{rec}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="grid grid-cols-4 gap-2 pt-4 mt-4 border-t border-zinc-100 dark:border-zinc-800/60 text-center text-xs">
-            <div>
-              <span className="text-zinc-400 text-[11px]">With Desc</span>
-              <p className="font-semibold text-zinc-900 dark:text-zinc-100 mt-0.5">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-4 mt-5 border-t border-zinc-100 dark:border-white/[0.06] text-center text-xs">
+            <div className="p-2.5 rounded-xl bg-zinc-50/70 dark:bg-white/[0.02] border border-zinc-200/50 dark:border-white/[0.05]">
+              <span className="text-zinc-500 dark:text-zinc-400 text-[11px] font-semibold uppercase tracking-wider">With Desc</span>
+              <p className="font-bold font-mono text-zinc-900 dark:text-zinc-100 text-sm mt-0.5">
                 {report.documentedRepos} / {report.totalReposAnalyzed}
               </p>
             </div>
-            <div>
-              <span className="text-zinc-400 text-[11px]">No License</span>
-              <p className="font-semibold text-amber-500 mt-0.5">{report.missingLicensesCount}</p>
+            <div className="p-2.5 rounded-xl bg-zinc-50/70 dark:bg-white/[0.02] border border-zinc-200/50 dark:border-white/[0.05]">
+              <span className="text-zinc-500 dark:text-zinc-400 text-[11px] font-semibold uppercase tracking-wider">No License</span>
+              <p className="font-bold font-mono text-amber-500 text-sm mt-0.5">{report.missingLicensesCount}</p>
             </div>
-            <div>
-              <span className="text-zinc-400 text-[11px]">No Topics</span>
-              <p className="font-semibold text-zinc-700 dark:text-zinc-300 mt-0.5">
+            <div className="p-2.5 rounded-xl bg-zinc-50/70 dark:bg-white/[0.02] border border-zinc-200/50 dark:border-white/[0.05]">
+              <span className="text-zinc-500 dark:text-zinc-400 text-[11px] font-semibold uppercase tracking-wider">No Topics</span>
+              <p className="font-bold font-mono text-zinc-700 dark:text-zinc-300 text-sm mt-0.5">
                 {report.missingTopicsCount}
               </p>
             </div>
-            <div>
-              <span className="text-zinc-400 text-[11px]">Stale &gt;6mo</span>
-              <p className="font-semibold text-purple-500 mt-0.5">{report.staleReposCount}</p>
+            <div className="p-2.5 rounded-xl bg-zinc-50/70 dark:bg-white/[0.02] border border-zinc-200/50 dark:border-white/[0.05]">
+              <span className="text-zinc-500 dark:text-zinc-400 text-[11px] font-semibold uppercase tracking-wider">Stale &gt;6mo</span>
+              <p className="font-bold font-mono text-purple-500 text-sm mt-0.5">{report.staleReposCount}</p>
             </div>
           </div>
         </Card>

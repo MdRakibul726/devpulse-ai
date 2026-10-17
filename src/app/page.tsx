@@ -91,7 +91,10 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-[#090b10] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-indigo-500 selection:text-white">
+    <div className="relative min-h-screen flex flex-col bg-zinc-50/80 dark:bg-[#08090d] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-indigo-500 selection:text-white">
+      {/* Ambient Lighting & Micro-Grid Atmosphere */}
+      <div className="fixed inset-0 bg-ambient-mesh bg-grid-subtle pointer-events-none -z-10" />
+
       {/* Navigation Header */}
       <Header
         onSearch={handleSearch}
@@ -294,21 +297,26 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="w-full border-t border-zinc-200/80 dark:border-zinc-800/80 py-6 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-sm text-xs text-zinc-500 dark:text-zinc-400 mt-12">
+      <footer className="w-full border-t border-zinc-200/80 dark:border-white/[0.07] py-8 bg-white/40 dark:bg-[#07090e]/70 backdrop-blur-xl text-xs text-zinc-500 dark:text-zinc-400 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-indigo-500" />
-            <span className="font-semibold text-zinc-700 dark:text-zinc-300">
+          <div className="flex items-center gap-2.5">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-600 to-cyan-400 text-white flex items-center justify-center shadow-xs">
+              <Activity className="w-3.5 h-3.5" />
+            </div>
+            <span className="font-bold text-zinc-800 dark:text-zinc-200 tracking-tight">
               DevPulse AI
             </span>
-            <span>—</span>
-            <span>GitHub Profile Analytics & AI Career Intelligence</span>
+            <span className="text-zinc-400 dark:text-zinc-600">—</span>
+            <span className="hidden sm:inline">GitHub Profile Intelligence & Career Copilot</span>
           </div>
 
-          <div className="flex items-center gap-4 text-xs">
-            <span>Production Portfolio Architecture</span>
-            <span>•</span>
-            <span>Next.js 16 + React 19 + TypeScript + Tailwind</span>
+          <div className="flex items-center gap-4 text-[11px]">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>All Systems Operational</span>
+            </div>
+            <span className="text-zinc-400 dark:text-zinc-600 hidden md:inline">•</span>
+            <span className="hidden md:inline text-zinc-400">Next.js 16 + React 19 + TypeScript + Tailwind v4</span>
           </div>
         </div>
       </footer>

@@ -93,16 +93,21 @@ export function LanguageChart({ languages }: LanguageChartProps) {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload as LanguageDistributionItem;
                       return (
-                        <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95 p-2.5 shadow-md text-xs backdrop-blur-sm">
-                          <div className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-100">
+                        <div className="rounded-2xl border border-zinc-200/90 dark:border-white/10 bg-white/95 dark:bg-[#0c0e17]/95 p-3.5 shadow-2xl text-xs backdrop-blur-xl ring-1 ring-black/5">
+                          <div className="flex items-center gap-2.5 font-bold text-zinc-900 dark:text-zinc-100">
                             <span
-                              className="w-2.5 h-2.5 rounded-full"
+                              className="w-3 h-3 rounded-full shadow-xs shrink-0"
                               style={{ backgroundColor: data.color }}
                             />
-                            {data.name}
+                            <span>{data.name}</span>
                           </div>
-                          <div className="mt-1 text-zinc-500 dark:text-zinc-400">
-                            {data.count} repos ({data.percentage}%)
+                          <div className="mt-1.5 flex items-center justify-between gap-4 text-zinc-500 dark:text-zinc-400 font-medium">
+                            <span>Share:</span>
+                            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{data.percentage}%</span>
+                          </div>
+                          <div className="flex items-center justify-between gap-4 text-zinc-500 dark:text-zinc-400 font-medium">
+                            <span>Repositories:</span>
+                            <span className="font-mono font-bold text-indigo-500">{data.count} repos</span>
                           </div>
                         </div>
                       );
@@ -120,19 +125,19 @@ export function LanguageChart({ languages }: LanguageChartProps) {
         </div>
 
         {/* Legend list */}
-        <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-zinc-800/60 grid grid-cols-2 gap-2 text-xs">
+        <div className="mt-4 pt-3.5 border-t border-zinc-100 dark:border-white/[0.06] grid grid-cols-2 gap-2 text-xs">
           {chartData.map((item) => (
-            <div key={item.name} className="flex items-center justify-between p-1 rounded-md hover:bg-zinc-100/50 dark:hover:bg-zinc-800/40 transition-colors">
-              <div className="flex items-center gap-2 truncate">
+            <div key={item.name} className="flex items-center justify-between p-2 rounded-xl hover:bg-zinc-100/70 dark:hover:bg-white/[0.04] border border-transparent hover:border-zinc-200/60 dark:hover:border-white/[0.06] transition-all">
+              <div className="flex items-center gap-2.5 truncate">
                 <span
-                  className="w-2 h-2 rounded-full shrink-0"
+                  className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="text-zinc-700 dark:text-zinc-300 font-medium truncate">
+                <span className="text-zinc-700 dark:text-zinc-300 font-semibold truncate">
                   {item.name}
                 </span>
               </div>
-              <span className="text-zinc-400 font-mono text-[11px] shrink-0">
+              <span className="text-zinc-500 dark:text-zinc-400 font-mono text-[11px] font-bold shrink-0 ml-2 px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-white/[0.06]">
                 {item.percentage}%
               </span>
             </div>

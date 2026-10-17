@@ -107,99 +107,101 @@ export function CareerCopilotTab({
   return (
     <div className="space-y-6">
       {/* Copilot Navigation Pills */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-zinc-200 dark:border-zinc-800 pb-3">
+      <div className="inline-flex h-12 items-center justify-start rounded-2xl bg-white/70 dark:bg-zinc-900/70 p-1.5 text-zinc-500 dark:text-zinc-400 border border-zinc-200/80 dark:border-white/[0.08] backdrop-blur-xl shadow-sm overflow-x-auto max-w-full gap-1 mb-2">
         <button
           onClick={() => setActiveSubTab('cv')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
             activeSubTab === 'cv'
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+              ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-md shadow-zinc-950/5 dark:shadow-indigo-500/10 font-bold border border-zinc-200/80 dark:border-white/10 scale-[1.02]'
+              : 'hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50'
           }`}
         >
-          <Award className="w-3.5 h-3.5" />
+          <Award className="w-3.5 h-3.5 text-indigo-500" />
           <span>CV Bullet Points</span>
         </button>
 
         <button
           onClick={() => setActiveSubTab('summary')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
             activeSubTab === 'summary'
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+              ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-md shadow-zinc-950/5 dark:shadow-indigo-500/10 font-bold border border-zinc-200/80 dark:border-white/10 scale-[1.02]'
+              : 'hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50'
           }`}
         >
-          <Code className="w-3.5 h-3.5" />
+          <Code className="w-3.5 h-3.5 text-cyan-500" />
           <span>Architecture Summary</span>
         </button>
 
         <button
           onClick={() => setActiveSubTab('readme')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
             activeSubTab === 'readme'
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+              ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-md shadow-zinc-950/5 dark:shadow-indigo-500/10 font-bold border border-zinc-200/80 dark:border-white/10 scale-[1.02]'
+              : 'hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50'
           }`}
         >
-          <BookMarked className="w-3.5 h-3.5" />
+          <BookMarked className="w-3.5 h-3.5 text-emerald-500" />
           <span>README Recommendations</span>
         </button>
 
         <button
           onClick={() => setActiveSubTab('weekly')}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all ${
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
             activeSubTab === 'weekly'
-              ? 'bg-indigo-600 text-white shadow-sm'
-              : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+              ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-md shadow-zinc-950/5 dark:shadow-indigo-500/10 font-bold border border-zinc-200/80 dark:border-white/10 scale-[1.02]'
+              : 'hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50'
           }`}
         >
-          <CalendarDays className="w-3.5 h-3.5" />
+          <CalendarDays className="w-3.5 h-3.5 text-purple-500" />
           <span>Weekly Dev Report</span>
         </button>
       </div>
 
       {/* Control Strip for Repo Selection */}
       {activeSubTab !== 'weekly' && repos.length > 0 && (
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/40 text-xs">
-          <div className="flex items-center gap-2">
-            <span className="font-semibold text-zinc-700 dark:text-zinc-300">Target Repo:</span>
-            <select
-              value={selectedRepoName}
-              onChange={(e) => setSelectedRepoName(e.target.value)}
-              className="h-8 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-            >
-              {repos.map((r) => (
-                <option key={r.id} value={r.name}>
-                  {r.name} ({r.stargazers_count} ★, {r.language || 'Code'})
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {activeSubTab === 'cv' && (
+        <div className="glass-panel rounded-2xl p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
+          <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-2">
-              <span className="font-semibold text-zinc-700 dark:text-zinc-300">Target Role:</span>
-              <input
-                type="text"
-                value={targetRole}
-                onChange={(e) => setTargetRole(e.target.value)}
-                placeholder="e.g. Senior Frontend Engineer"
-                className="h-8 px-2.5 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
-              />
+              <span className="font-semibold text-zinc-700 dark:text-zinc-300">Target Repo:</span>
+              <select
+                value={selectedRepoName}
+                onChange={(e) => setSelectedRepoName(e.target.value)}
+                className="h-9 px-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-white/90 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer shadow-xs"
+              >
+                {repos.map((r) => (
+                  <option key={r.id} value={r.name}>
+                    {r.name} ({r.stargazers_count} ★, {r.language || 'Code'})
+                  </option>
+                ))}
+              </select>
             </div>
-          )}
+
+            {activeSubTab === 'cv' && (
+              <div className="flex items-center gap-2">
+                <span className="font-semibold text-zinc-700 dark:text-zinc-300">Target Role:</span>
+                <input
+                  type="text"
+                  value={targetRole}
+                  onChange={(e) => setTargetRole(e.target.value)}
+                  placeholder="e.g. Senior Frontend Engineer"
+                  className="h-9 px-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-white/90 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500/40 shadow-xs"
+                />
+              </div>
+            )}
+          </div>
 
           <Button
             size="sm"
             onClick={() => handleGenerate(activeSubTab)}
             disabled={loading}
-            className="gap-1.5"
+            className="gap-2 rounded-xl font-semibold bg-gradient-to-r from-indigo-600 via-indigo-500 to-cyan-500 hover:opacity-95 text-white shadow-md shadow-indigo-500/25 active:scale-95 cursor-pointer shrink-0"
           >
             {loading ? (
               <RefreshCw className="w-3.5 h-3.5 animate-spin" />
             ) : (
               <Sparkles className="w-3.5 h-3.5" />
             )}
-            <span>Generate Analysis</span>
+            <span>Generate with AI</span>
           </Button>
         </div>
       )}

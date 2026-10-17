@@ -69,17 +69,23 @@ export function MetricsOverview({
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-6">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5 mb-8">
       {metrics.map((m, idx) => {
         const Icon = m.icon;
         return (
-          <Card key={idx} className="relative overflow-hidden group hover:border-zinc-300 dark:hover:border-zinc-700 transition-all">
+          <Card
+            key={idx}
+            className="relative overflow-hidden group hover:border-indigo-500/40 dark:hover:border-indigo-500/30 transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-indigo-500/5 cursor-default"
+          >
+            {/* Top Specular Line Accent */}
+            <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent group-hover:via-indigo-500/50 transition-colors" />
+
             <CardContent className="p-4 sm:p-5">
-              <div className="flex items-center justify-between mb-2.5">
-                <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   {m.label}
                 </span>
-                <div className={`p-2 rounded-lg ${m.bgColor} ${m.iconColor}`}>
+                <div className={`p-2 rounded-xl ${m.bgColor} ${m.iconColor} group-hover:scale-110 transition-transform duration-200 shadow-xs ring-1 ring-black/5 dark:ring-white/10`}>
                   <Icon className="w-4 h-4" />
                 </div>
               </div>
@@ -87,16 +93,16 @@ export function MetricsOverview({
               <div className="flex items-baseline gap-2">
                 {m.isLanguage && topLanguage && (
                   <span
-                    className="w-2.5 h-2.5 rounded-full shrink-0"
+                    className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
                     style={{ backgroundColor: getLanguageColor(topLanguage) }}
                   />
                 )}
-                <div className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 truncate">
+                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-white font-mono truncate">
                   {m.value}
                 </div>
               </div>
 
-              <p className="mt-1 text-[11px] text-zinc-400 dark:text-zinc-500 truncate">
+              <p className="mt-1.5 text-[11px] text-zinc-500 dark:text-zinc-400 truncate font-medium">
                 {m.description}
               </p>
             </CardContent>

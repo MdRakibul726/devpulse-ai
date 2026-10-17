@@ -19,7 +19,7 @@ export function DevPulseIndicator({ rateLimit, isDemo, onResetHome }: DevPulseIn
     <div className="fixed bottom-4 left-4 z-50 select-none">
       {/* DevTools Menu Modal */}
       {isOpen && (
-        <div className="mb-2 w-72 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl shadow-2xl p-4 text-xs text-zinc-800 dark:text-zinc-200 animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="glass-panel mb-2.5 w-80 rounded-3xl border border-zinc-200/90 dark:border-white/10 bg-white/95 dark:bg-[#0c0e17]/95 backdrop-blur-2xl shadow-2xl p-5 text-xs text-zinc-800 dark:text-zinc-200 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-2.5 mb-3">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-600 to-cyan-400 text-white shadow-sm">
