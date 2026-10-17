@@ -23,6 +23,7 @@ import { HealthAnalyzerTab } from '@/components/HealthAnalyzerTab';
 import { CareerCopilotTab } from '@/components/CareerCopilotTab';
 import { ReadmeCardGeneratorTab } from '@/components/ReadmeCardGeneratorTab';
 import { RateLimitBanner } from '@/components/RateLimitBanner';
+import { DevPulseIndicator } from '@/components/DevPulseIndicator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -82,6 +83,12 @@ export default function Home() {
     setActiveTab('cards');
   };
 
+  const handleResetHome = () => {
+    setActiveTab('overview');
+    setHighlightRepoForAction(null);
+    fetchProfile('shadcn');
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-zinc-50 dark:bg-[#090b10] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-indigo-500 selection:text-white">
       {/* Navigation Header */}
@@ -89,6 +96,7 @@ export default function Home() {
         onSearch={handleSearch}
         isLoading={loading}
         currentUsername={username}
+        onResetHome={handleResetHome}
       />
 
       {/* Main Container */}
@@ -272,6 +280,13 @@ export default function Home() {
           </div>
         )}
       </main>
+
+      {/* Branded DevPulse Indicator (Custom DevTools) */}
+      <DevPulseIndicator
+        rateLimit={data?.rateLimit}
+        isDemo={data?.isDemo}
+        onResetHome={handleResetHome}
+      />
 
       {/* Footer */}
       <footer className="w-full border-t border-zinc-200/80 dark:border-zinc-800/80 py-6 bg-white/50 dark:bg-zinc-950/50 backdrop-blur-sm text-xs text-zinc-500 dark:text-zinc-400 mt-12">

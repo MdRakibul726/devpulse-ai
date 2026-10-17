@@ -9,9 +9,10 @@ interface HeaderProps {
   onSearch: (username: string) => void;
   isLoading: boolean;
   currentUsername: string;
+  onResetHome?: () => void;
 }
 
-export function Header({ onSearch, isLoading, currentUsername }: HeaderProps) {
+export function Header({ onSearch, isLoading, currentUsername, onResetHome }: HeaderProps) {
   const [searchInput, setSearchInput] = useState(currentUsername || '');
   const { theme, toggleTheme } = useTheme();
 
@@ -27,17 +28,31 @@ export function Header({ onSearch, isLoading, currentUsername }: HeaderProps) {
     onSearch(username);
   };
 
+  const handleHomeClick = () => {
+    setSearchInput('shadcn');
+    if (onResetHome) {
+      onResetHome();
+    } else {
+      window.location.href = '/';
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 dark:border-zinc-800/80 bg-white/80 dark:bg-zinc-950/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Brand */}
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 text-white shadow-md shadow-indigo-500/20">
+        {/* Brand / Home Link */}
+        <button
+          type="button"
+          onClick={handleHomeClick}
+          className="flex items-center gap-3 group cursor-pointer text-left focus:outline-none"
+          title="Return to Home Dashboard"
+        >
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-cyan-400 text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
             <Activity className="w-5 h-5 animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-zinc-900 via-indigo-900 to-zinc-700 dark:from-white dark:via-zinc-200 dark:to-zinc-400 bg-clip-text text-transparent">
+              <span className="font-bold text-lg tracking-tight bg-gradient-to-r from-zinc-900 via-indigo-900 to-zinc-700 dark:from-white dark:via-zinc-200 dark:to-zinc-400 bg-clip-text text-transparent group-hover:opacity-90">
                 DevPulse
               </span>
               <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 flex items-center gap-1">
@@ -48,7 +63,7 @@ export function Header({ onSearch, isLoading, currentUsername }: HeaderProps) {
               GitHub Intelligence & Career Assistant
             </p>
           </div>
-        </div>
+        </button>
 
         {/* Search Bar */}
         <form onSubmit={handleFormSubmit} className="flex-1 max-w-md relative">

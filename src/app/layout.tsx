@@ -18,7 +18,9 @@ export const metadata: Metadata = {
   description:
     'Professional GitHub analytics, evidence-based AI career assistant, repository health analyzer, and dynamic SVG README card generator for developers.',
   icons: {
-    icon: '/favicon.ico',
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   },
 };
 
