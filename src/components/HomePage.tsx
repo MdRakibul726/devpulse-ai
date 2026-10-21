@@ -32,11 +32,11 @@ export function HomePage({ onSearch, isLoading }: HomePageProps) {
   };
 
   const featuredDevelopers = [
-    { name: 'MdRakibul726', label: 'Creator Showcase', badge: 'Creator', highlight: true },
-    { name: 'shadcn', label: 'UI Architect', badge: 'Popular', highlight: false },
+    { name: 'shadcn', label: 'UI Architect', badge: 'Popular', highlight: true },
     { name: 'torvalds', label: 'Linux Creator', badge: 'Legend', highlight: false },
     { name: 'leerob', label: 'Next.js Dev', badge: 'Core', highlight: false },
     { name: 'gaearon', label: 'React Pioneer', badge: 'Alum', highlight: false },
+    { name: 'octocat', label: 'GitHub Official', badge: 'Official', highlight: false },
   ];
 
   const features = [
@@ -142,7 +142,7 @@ export function HomePage({ onSearch, isLoading }: HomePageProps) {
               type="text"
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
-              placeholder="Enter GitHub username (e.g. MdRakibul726)"
+              placeholder="Enter GitHub username (e.g. shadcn, torvalds)"
               className="w-full bg-transparent border-0 px-2 py-2 text-sm text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 focus:outline-none"
             />
             <Button
@@ -185,28 +185,28 @@ export function HomePage({ onSearch, isLoading }: HomePageProps) {
         </div>
       </section>
 
-      {/* Creator Showcase Spotlight Banner */}
+      {/* Featured Architecture Spotlight Banner */}
       <section className="max-w-4xl mx-auto">
         <div className="relative overflow-hidden rounded-2xl panel-surface specular-top p-6 sm:p-8 border border-indigo-500/30 bg-gradient-to-br from-indigo-500/[0.08] via-transparent to-cyan-500/[0.05]">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 text-center md:text-left">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 border border-indigo-500/30">
                 <Star className="w-3 h-3 fill-indigo-500" />
-                Featured Creator Portfolio
+                Interactive Live Demo
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white">
-                Explore @MdRakibul726 in Action
+                Explore DevPulse Intelligence Live
               </h2>
               <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-300 max-w-xl">
-                See real-time analytics across 10 active repositories, full language distributions, audit grades, and AI resume bullets generated on demand.
+                See real-time analytics across open repositories, complete language distributions, automated documentation audit grades, and AI resume bullets.
               </p>
             </div>
             <Button
               type="button"
-              onClick={() => onSearch('MdRakibul726')}
+              onClick={() => onSearch('shadcn')}
               className="h-11 px-6 rounded-xl font-semibold text-xs sm:text-sm bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-500 hover:to-indigo-600 text-white shadow-lg shadow-indigo-600/30 shrink-0 cursor-pointer"
             >
-              Launch Creator Dashboard
+              Launch Live Demo (@shadcn)
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
@@ -368,15 +368,15 @@ export function HomePage({ onSearch, isLoading }: HomePageProps) {
           Ready to Analyze Your GitHub Intelligence?
         </h2>
         <p className="text-xs sm:text-sm text-zinc-500 dark:text-zinc-400">
-          Enter your username above or launch the creator demo to see all features live.
+          Enter your username above or launch the demo to see all features live.
         </p>
         <div className="flex items-center justify-center gap-3 pt-2">
           <Button
             type="button"
-            onClick={() => onSearch('MdRakibul726')}
+            onClick={() => onSearch('shadcn')}
             className="h-11 px-6 rounded-xl font-semibold text-xs sm:text-sm bg-gradient-to-r from-indigo-600 via-indigo-700 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white shadow-lg shadow-indigo-600/30 cursor-pointer"
           >
-            Launch Live Demo (@MdRakibul726)
+            Launch Live Demo (@shadcn)
             <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
         </div>

@@ -224,7 +224,7 @@ export default function Home() {
                   </Button>
                   <Button
                     size="sm"
-                    onClick={() => fetchProfile(username || 'MdRakibul726', false, true)}
+                    onClick={() => fetchProfile(username || 'shadcn', false, true)}
                     className="gap-1.5"
                   >
                     <Sparkles className="w-3.5 h-3.5" />

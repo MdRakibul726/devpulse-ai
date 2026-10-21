@@ -48,7 +48,7 @@ export function Header({
     }
   };
 
-  const featuredUsers = ['MdRakibul726', 'shadcn', 'torvalds', 'leerob', 'gaearon', 'octocat'] as const;
+  const featuredUsers = ['shadcn', 'torvalds', 'leerob', 'gaearon', 'octocat'] as const;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-zinc-200/80 dark:border-white/[0.07] bg-white/80 dark:bg-[#090a0f]/85 backdrop-blur-xl transition-colors duration-200">
