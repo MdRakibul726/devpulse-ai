@@ -8,10 +8,7 @@ import {
   Info,
   CheckCircle2,
   FileText,
-  Clock,
   Sparkles,
-  ArrowRight,
-  Check,
 } from 'lucide-react';
 import { GitHubRepo } from '@/lib/schemas';
 import { analyzeProjectHealth } from '@/lib/health';

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Star, GitFork, Code2, GitCommit, FolderGit, TrendingUp } from 'lucide-react';
+import { Star, GitFork, Code2, GitCommit, FolderGit } from 'lucide-react';
 import { formatNumber, getLanguageColor } from '@/lib/utils';
 
 interface MetricsOverviewProps {

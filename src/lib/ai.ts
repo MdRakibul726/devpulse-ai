@@ -83,7 +83,7 @@ async function callOpenAI(prompt: string, apiKey: string): Promise<string> {
   return json?.choices?.[0]?.message?.content || '{}';
 }
 
-function extractJSON(text: string): any {
+function extractJSON(text: string): unknown {
   let cleaned = text.trim();
   // Strip markdown code fences if model returned ```json ... ```
   if (cleaned.startsWith('```json')) {
@@ -247,7 +247,6 @@ export async function generateReadmeRecommendations(
   repo: GitHubRepo
 ): Promise<ReadmeRecommendationsOutput> {
   const geminiKey = process.env.GEMINI_API_KEY;
-  const openAIKey = process.env.OPENAI_API_KEY;
 
   const prompt = [
     'Recommend actionable README documentation improvements for this repository.',
@@ -321,7 +320,6 @@ export async function generateWeeklyReport(
   repos: GitHubRepo[]
 ): Promise<WeeklyReportOutput> {
   const geminiKey = process.env.GEMINI_API_KEY;
-  const openAIKey = process.env.OPENAI_API_KEY;
 
   const eventCount = events.length;
   const activeRepoNames = Array.from(new Set(events.map((e) => e.repo.name)));

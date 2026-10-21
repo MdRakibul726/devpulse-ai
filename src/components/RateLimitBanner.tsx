@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ShieldAlert, Sparkles, KeyRound, CheckCircle2 } from 'lucide-react';
+import { ShieldAlert, Sparkles, KeyRound } from 'lucide-react';
 import { RateLimitInfo } from '@/lib/schemas';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -17,7 +17,6 @@ export function RateLimitBanner({ rateLimit, isDemo, onSwitchToDemo }: RateLimit
 
   const isLow = rateLimit.remaining <= 10 && !isDemo;
   const isExceeded = rateLimit.isExceeded;
-  const quotaPercent = rateLimit.limit > 0 ? Math.round((rateLimit.remaining / rateLimit.limit) * 100) : 100;
 
   if (isDemo) {
     return (

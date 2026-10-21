@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Activity, X, Sun, Moon, RefreshCw, Terminal, Cpu } from 'lucide-react';
+import { Activity, X, Sun, Moon, RefreshCw, Cpu } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { RateLimitInfo } from '@/lib/schemas';
 import { Button } from './ui/button';

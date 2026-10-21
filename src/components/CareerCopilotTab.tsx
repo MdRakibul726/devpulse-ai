@@ -75,7 +75,7 @@ export function CareerCopilotTab({
     setLoading(true);
 
     try {
-      const payload: any = { type };
+      const payload: Record<string, unknown> = { type };
       if (type === 'cv') {
         payload.repo = selectedRepo;
         payload.role = targetRole;

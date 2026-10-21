@@ -6,10 +6,6 @@ import {
   Copy,
   Check,
   ExternalLink,
-  Code2,
-  Sparkles,
-  Layers,
-  Palette,
 } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
 import { Button } from './ui/button';

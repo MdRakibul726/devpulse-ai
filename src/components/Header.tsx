@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Search, Sun, Moon, Github, Sparkles, RefreshCw, X, Command } from 'lucide-react';
+import { Search, Sun, Moon, Github, RefreshCw, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { useTheme } from './ThemeProvider';
 

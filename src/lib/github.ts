@@ -1,5 +1,4 @@
 import {
-  GitHubUser,
   GitHubUserSchema,
   GitHubRepo,
   GitHubRepoSchema,

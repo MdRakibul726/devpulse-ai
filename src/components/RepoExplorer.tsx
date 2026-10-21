@@ -19,7 +19,6 @@ import {
 import { GitHubRepo } from '@/lib/schemas';
 import { formatNumber, timeAgo, getLanguageColor } from '@/lib/utils';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
 
 interface RepoExplorerProps {
   repos: GitHubRepo[];
@@ -129,7 +128,7 @@ export function RepoExplorer({
             <ArrowUpDown className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as 'updated' | 'stars' | 'forks')}
               className="h-9 px-2.5 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-100/70 dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer"
             >
               <option value="updated">Recently Updated (Live)</option>

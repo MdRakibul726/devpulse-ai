@@ -2,7 +2,6 @@ import { describe, it, expect } from 'vitest';
 import {
   UsernameSchema,
   GitHubUserSchema,
-  GitHubRepoSchema,
   RateLimitInfoSchema,
   LanguageDistributionItemSchema,
 } from '../lib/schemas';

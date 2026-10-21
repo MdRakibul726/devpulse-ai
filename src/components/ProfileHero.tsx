@@ -13,7 +13,6 @@ import {
   Check,
   FolderGit2,
   RefreshCw,
-  GitPullRequest,
 } from 'lucide-react';
 import { GitHubUser } from '@/lib/schemas';
 import { formatDate, formatNumber } from '@/lib/utils';
