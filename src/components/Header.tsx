@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Search, Sun, Moon, Github, RefreshCw, X } from 'lucide-react';
+import { Search, Sun, Moon, Github, RefreshCw, X, Home as HomeIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { useTheme } from './ThemeProvider';
 
@@ -10,9 +10,16 @@ interface HeaderProps {
   isLoading: boolean;
   currentUsername: string;
   onResetHome?: () => void;
+  isHome?: boolean;
 }
 
-export function Header({ onSearch, isLoading, currentUsername, onResetHome }: HeaderProps) {
+export function Header({
+  onSearch,
+  isLoading,
+  currentUsername,
+  onResetHome,
+  isHome = false,
+}: HeaderProps) {
   const [searchInput, setSearchInput] = useState(currentUsername || '');
   const { theme, toggleTheme } = useTheme();
 
@@ -33,7 +40,7 @@ export function Header({ onSearch, isLoading, currentUsername, onResetHome }: He
   };
 
   const handleHomeClick = () => {
-    setSearchInput('MdRakibul726');
+    setSearchInput('');
     if (onResetHome) {
       onResetHome();
     } else {
@@ -122,6 +129,23 @@ export function Header({ onSearch, isLoading, currentUsername, onResetHome }: He
 
         {/* Right Nav Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Home Nav Button */}
+          <Button
+            type="button"
+            variant={isHome ? 'secondary' : 'ghost'}
+            size="sm"
+            onClick={handleHomeClick}
+            className={`h-8 px-2.5 text-xs font-medium gap-1.5 cursor-pointer ${
+              isHome
+                ? 'bg-indigo-500/15 text-indigo-600 dark:text-indigo-400 font-semibold border border-indigo-500/30'
+                : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+            }`}
+            title="DevPulse Home"
+          >
+            <HomeIcon className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Home</span>
+          </Button>
+
           {/* Theme Toggle */}
           <button
             type="button"

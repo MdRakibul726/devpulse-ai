@@ -23,14 +23,16 @@ import { CareerCopilotTab } from '@/components/CareerCopilotTab';
 import { ReadmeCardGeneratorTab } from '@/components/ReadmeCardGeneratorTab';
 import { RateLimitBanner } from '@/components/RateLimitBanner';
 import { DevPulseIndicator } from '@/components/DevPulseIndicator';
+import { HomePage } from '@/components/HomePage';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 export default function Home() {
-  const [username, setUsername] = useState<string>('MdRakibul726');
+  const [viewMode, setViewMode] = useState<'home' | 'dashboard'>('home');
+  const [username, setUsername] = useState<string>('');
   const [data, setData] = useState<DashboardData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [highlightRepoForAction, setHighlightRepoForAction] = useState<string | null>(null);
@@ -57,7 +59,7 @@ export default function Home() {
       const activeLogin = json.user?.login || userToFetch;
       setUsername(activeLogin);
 
-      // Persist active user to URL and localStorage so reload keeps current profile
+      // Persist active user to URL so reload keeps current profile
       if (typeof window !== 'undefined') {
         try {
           localStorage.setItem('devpulse_active_user', activeLogin);
@@ -79,24 +81,38 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    let initialUser = 'MdRakibul726';
     if (typeof window !== 'undefined') {
       const urlParams = new URLSearchParams(window.location.search);
       const paramUser = urlParams.get('user');
-      const cachedUser = localStorage.getItem('devpulse_active_user');
       if (paramUser && paramUser.trim()) {
-        initialUser = paramUser.trim();
-      } else if (cachedUser && cachedUser.trim()) {
-        initialUser = cachedUser.trim();
+        const cleanUser = paramUser.trim();
+        setUsername(cleanUser);
+        setViewMode('dashboard');
+        fetchProfile(cleanUser, true);
+        return;
       }
     }
-    setUsername(initialUser);
-    fetchProfile(initialUser, true);
+    // Default to Home page if no user query parameter
+    setViewMode('home');
+    setLoading(false);
   }, [fetchProfile]);
 
   const handleSearch = (searchedUsername: string) => {
-    // When a user searches or clicks Analyze, ALWAYS force refresh to get live repos
-    fetchProfile(searchedUsername, true);
+    if (!searchedUsername.trim()) return;
+    const clean = searchedUsername.trim();
+    setUsername(clean);
+    setViewMode('dashboard');
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('devpulse_active_user', clean);
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('user', clean);
+        window.history.pushState(null, '', currentUrl.toString());
+      } catch {
+        // ignore
+      }
+    }
+    fetchProfile(clean, true);
   };
 
   const handleSelectRepoForAI = (repoName: string) => {
@@ -115,9 +131,21 @@ export default function Home() {
   };
 
   const handleResetHome = () => {
+    setViewMode('home');
     setActiveTab('overview');
     setHighlightRepoForAction(null);
-    fetchProfile('MdRakibul726', true);
+    setError(null);
+    setUsername('');
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('devpulse_active_user');
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.delete('user');
+        window.history.pushState(null, '', currentUrl.pathname);
+      } catch {
+        // ignore
+      }
+    }
   };
 
   return (
@@ -131,122 +159,143 @@ export default function Home() {
         isLoading={loading}
         currentUsername={username}
         onResetHome={handleResetHome}
+        isHome={viewMode === 'home'}
       />
 
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-7">
-        {/* Loading State Skeleton */}
-        {loading && (
-          <div className="space-y-6 animate-in fade-in duration-300">
-            <Skeleton className="h-44 w-full rounded-3xl" />
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-28 rounded-2xl" />
-              ))}
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Skeleton className="h-80 rounded-2xl" />
-              <Skeleton className="h-80 rounded-2xl" />
-            </div>
-          </div>
-        )}
-
-        {/* Error State with fallback to demo */}
-        {!loading && error && (
-          <div className="panel-surface specular-top rounded-3xl p-8 text-center max-w-lg mx-auto my-12 border border-rose-500/30">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto mb-3">
-              <AlertCircle className="w-6 h-6" />
-            </div>
-            <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
-              Unable to Fetch GitHub Profile
-            </h3>
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 mb-6 leading-relaxed">
-              {error}
-            </p>
-            <div className="flex items-center justify-center gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => fetchProfile(username, true)}
-                className="gap-1.5"
+        {viewMode === 'home' ? (
+          <HomePage onSearch={handleSearch} isLoading={loading} />
+        ) : (
+          <>
+            {/* Dashboard Back Nav */}
+            <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-200/60 dark:border-white/[0.06]">
+              <button
+                type="button"
+                onClick={handleResetHome}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors cursor-pointer group"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Retry</span>
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => fetchProfile(username || 'MdRakibul726', false, true)}
-                className="gap-1.5"
-              >
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Load Demo Profile</span>
-              </Button>
+                <ArrowRight className="w-3.5 h-3.5 rotate-180 group-hover:-translate-x-0.5 transition-transform" />
+                <span>Return to DevPulse Home</span>
+              </button>
+
+              <div className="text-xs text-zinc-400">
+                Analyzing: <span className="font-semibold text-zinc-800 dark:text-zinc-200">@{username}</span>
+              </div>
             </div>
-          </div>
-        )}
 
-        {/* Profile Content */}
-        {!loading && !error && data && (
-          <div className="animate-in fade-in duration-300">
-            {/* Rate Limit Banner */}
-            <RateLimitBanner
-              rateLimit={data.rateLimit}
-              isDemo={data.isDemo}
-              onSwitchToDemo={() => fetchProfile(username, false, true)}
-            />
+            {/* Loading State Skeleton */}
+            {loading && (
+              <div className="space-y-6 animate-in fade-in duration-300">
+                <Skeleton className="h-44 w-full rounded-3xl" />
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Skeleton key={i} className="h-28 rounded-2xl" />
+                  ))}
+                </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <Skeleton className="h-80 rounded-2xl" />
+                  <Skeleton className="h-80 rounded-2xl" />
+                </div>
+              </div>
+            )}
 
-            {/* Profile Hero Header */}
-            <ProfileHero
-              user={data.user}
-              onRefresh={() => fetchProfile(username, true)}
-              isRefreshing={loading}
-            />
+            {/* Error State with fallback to demo */}
+            {!loading && error && (
+              <div className="panel-surface specular-top rounded-3xl p-8 text-center max-w-lg mx-auto my-12 border border-rose-500/30">
+                <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto mb-3">
+                  <AlertCircle className="w-6 h-6" />
+                </div>
+                <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
+                  Unable to Fetch GitHub Profile
+                </h3>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 mb-6 leading-relaxed">
+                  {error}
+                </p>
+                <div className="flex items-center justify-center gap-3">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fetchProfile(username, true)}
+                    className="gap-1.5"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    <span>Retry</span>
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={() => fetchProfile(username || 'MdRakibul726', false, true)}
+                    className="gap-1.5"
+                  >
+                    <Sparkles className="w-3.5 h-3.5" />
+                    <span>Load Demo Profile</span>
+                  </Button>
+                </div>
+              </div>
+            )}
 
-            {/* Main Feature Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
-              <TabsList className="mb-6">
-                <TabsTrigger
-                  value="overview"
-                  icon={<Activity className="w-3.5 h-3.5 text-indigo-500" />}
-                >
-                  Overview & Analytics
-                </TabsTrigger>
-                <TabsTrigger
-                  value="repos"
-                  icon={<FolderGit2 className="w-3.5 h-3.5 text-cyan-500" />}
-                >
-                  Repositories ({data.repos.length})
-                </TabsTrigger>
-                <TabsTrigger
-                  value="health"
-                  icon={<ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />}
-                >
-                  Health Audit
-                </TabsTrigger>
-                <TabsTrigger
-                  value="copilot"
-                  icon={<Sparkles className="w-3.5 h-3.5 text-amber-500" />}
-                >
-                  AI Career Copilot
-                </TabsTrigger>
-                <TabsTrigger
-                  value="cards"
-                  icon={<Tag className="w-3.5 h-3.5 text-purple-500" />}
-                >
-                  README Cards
-                </TabsTrigger>
-              </TabsList>
-
-              {/* TAB 1: OVERVIEW */}
-              <TabsContent value="overview" className="space-y-6">
-                {/* 5 KPI Metric Cards */}
-                <MetricsOverview
-                  totalStars={data.totalStars}
-                  totalForks={data.totalForks}
-                  topLanguage={data.topLanguage}
-                  recentCommitCount30d={data.recentCommitCount30d}
-                  totalRepos={data.repos.length}
+            {/* Profile Content */}
+            {!loading && !error && data && (
+              <div className="animate-in fade-in duration-300">
+                {/* Rate Limit Banner */}
+                <RateLimitBanner
+                  rateLimit={data.rateLimit}
+                  isDemo={data.isDemo}
+                  onSwitchToDemo={() => fetchProfile(username, false, true)}
                 />
+
+                {/* Profile Hero Header */}
+                <ProfileHero
+                  user={data.user}
+                  onRefresh={() => fetchProfile(username, true)}
+                  isRefreshing={loading}
+                />
+
+                {/* Main Feature Tabs */}
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-6">
+                  <TabsList className="mb-6">
+                    <TabsTrigger
+                      value="overview"
+                      icon={<Activity className="w-3.5 h-3.5 text-indigo-500" />}
+                    >
+                      Overview & Analytics
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="repos"
+                      icon={<FolderGit2 className="w-3.5 h-3.5 text-cyan-500" />}
+                    >
+                      Repositories ({data.repos.length})
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="health"
+                      icon={<ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />}
+                    >
+                      Health Audit
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="copilot"
+                      icon={<Sparkles className="w-3.5 h-3.5 text-amber-500" />}
+                    >
+                      AI Career Copilot
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="cards"
+                      icon={<Tag className="w-3.5 h-3.5 text-purple-500" />}
+                    >
+                      README Cards
+                    </TabsTrigger>
+                  </TabsList>
+
+                  {/* TAB 1: OVERVIEW */}
+                  <TabsContent value="overview" className="space-y-6">
+                    {/* 5 KPI Metric Cards */}
+                    <MetricsOverview
+                      totalStars={data.totalStars}
+                      totalForks={data.totalForks}
+                      topLanguage={data.topLanguage}
+                      recentCommitCount30d={data.recentCommitCount30d}
+                      totalRepos={data.repos.length}
+                    />
 
                 {/* Charts Grid */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -320,7 +369,9 @@ export default function Home() {
             </Tabs>
           </div>
         )}
-      </main>
+      </>
+    )}
+  </main>
 
       {/* Branded DevPulse Diagnostics Indicator */}
       <DevPulseIndicator
