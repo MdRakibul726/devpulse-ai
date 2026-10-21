@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { UsernameSchema } from '@/lib/schemas';
 import { fetchGitHubDashboardData, getDemoProfile } from '@/lib/github';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ username: string }> }
@@ -50,8 +53,8 @@ export async function GET(
     return NextResponse.json(result.data, {
       headers: {
         'Cache-Control': forceRefresh
-          ? 'no-store, no-cache, must-revalidate, max-age=0'
-          : 'public, s-maxage=300, stale-while-revalidate=600',
+          ? 'no-store, no-cache, must-revalidate, max-age=0, proxy-revalidate'
+          : 'public, s-maxage=30, stale-while-revalidate=60',
       },
     });
   } catch (error) {

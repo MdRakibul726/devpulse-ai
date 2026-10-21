@@ -28,7 +28,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 export default function Home() {
-  const [username, setUsername] = useState<string>('shadcn');
+  const [username, setUsername] = useState<string>('MdRakibul726');
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,8 +41,12 @@ export default function Home() {
     setError(null);
 
     try {
-      const url = `/api/github/${encodeURIComponent(userToFetch)}?refresh=${forceRefresh}&demo=${demoOnly}`;
-      const res = await fetch(url);
+      const timestampParam = forceRefresh ? `&_t=${Date.now()}` : '';
+      const url = `/api/github/${encodeURIComponent(userToFetch)}?refresh=${forceRefresh}&demo=${demoOnly}${timestampParam}`;
+      const res = await fetch(url, {
+        cache: forceRefresh ? 'no-store' : 'default',
+        headers: forceRefresh ? { 'Cache-Control': 'no-cache, no-store' } : undefined,
+      });
       const json = await res.json();
 
       if (!res.ok) {
@@ -50,7 +54,22 @@ export default function Home() {
       }
 
       setData(json);
-      setUsername(json.user?.login || userToFetch);
+      const activeLogin = json.user?.login || userToFetch;
+      setUsername(activeLogin);
+
+      // Persist active user to URL and localStorage so reload keeps current profile
+      if (typeof window !== 'undefined') {
+        try {
+          localStorage.setItem('devpulse_active_user', activeLogin);
+          const currentUrl = new URL(window.location.href);
+          if (currentUrl.searchParams.get('user') !== activeLogin) {
+            currentUrl.searchParams.set('user', activeLogin);
+            window.history.replaceState(null, '', currentUrl.toString());
+          }
+        } catch {
+          // ignore storage errors
+        }
+      }
     } catch (err) {
       console.error('Fetch profile error:', err);
       setError(err instanceof Error ? err.message : 'An unexpected error occurred while communicating with GitHub.');
@@ -60,12 +79,24 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    fetchProfile('shadcn');
+    let initialUser = 'MdRakibul726';
+    if (typeof window !== 'undefined') {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramUser = urlParams.get('user');
+      const cachedUser = localStorage.getItem('devpulse_active_user');
+      if (paramUser && paramUser.trim()) {
+        initialUser = paramUser.trim();
+      } else if (cachedUser && cachedUser.trim()) {
+        initialUser = cachedUser.trim();
+      }
+    }
+    setUsername(initialUser);
+    fetchProfile(initialUser, true);
   }, [fetchProfile]);
 
   const handleSearch = (searchedUsername: string) => {
-    const isSameUser = searchedUsername.trim().toLowerCase() === username.trim().toLowerCase();
-    fetchProfile(searchedUsername, isSameUser);
+    // When a user searches or clicks Analyze, ALWAYS force refresh to get live repos
+    fetchProfile(searchedUsername, true);
   };
 
   const handleSelectRepoForAI = (repoName: string) => {
@@ -86,7 +117,7 @@ export default function Home() {
   const handleResetHome = () => {
     setActiveTab('overview');
     setHighlightRepoForAction(null);
-    fetchProfile('shadcn');
+    fetchProfile('MdRakibul726', true);
   };
 
   return (
@@ -144,7 +175,7 @@ export default function Home() {
               </Button>
               <Button
                 size="sm"
-                onClick={() => fetchProfile('shadcn', false, true)}
+                onClick={() => fetchProfile(username || 'MdRakibul726', false, true)}
                 className="gap-1.5"
               >
                 <Sparkles className="w-3.5 h-3.5" />

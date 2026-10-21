@@ -64,6 +64,7 @@ export const GitHubRepoSchema = z.object({
   default_branch: z.string().default('main'),
   archived: z.boolean().default(false),
   disabled: z.boolean().optional().default(false),
+  homepage: z.string().nullable().optional(),
 });
 
 export type GitHubRepo = z.infer<typeof GitHubRepoSchema>;

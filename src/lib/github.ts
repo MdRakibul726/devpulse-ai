@@ -18,7 +18,7 @@ interface CacheEntry {
   expiresAt: number;
 }
 const cache = new Map<string, CacheEntry>();
-const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+const CACHE_TTL_MS = 60 * 1000; // 1 minute (ensures newly pushed repos appear live)
 
 export function parseRateLimitHeaders(headers: Headers): RateLimitInfo {
   const limit = parseInt(headers.get('x-ratelimit-limit') || '60', 10);
@@ -142,7 +142,7 @@ export async function fetchGitHubDashboardData(
   const headers = getRequestHeaders();
   const fetchOptions: RequestInit = forceRefresh
     ? { cache: 'no-store' }
-    : { next: { revalidate: 600 } };
+    : { next: { revalidate: 60 } };
 
   try {
     // 1. Fetch user profile
@@ -182,9 +182,9 @@ export async function fetchGitHubDashboardData(
     const userDataRaw = await userRes.json();
     const user = GitHubUserSchema.parse(userDataRaw);
 
-    // 2. Fetch public repositories (up to 100 most recently updated)
+    // 2. Fetch public repositories (up to 100 most recently updated, descending)
     const reposRes = await fetch(
-      `https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated`,
+      `https://api.github.com/users/${encodeURIComponent(username)}/repos?per_page=100&sort=updated&direction=desc`,
       { headers, ...fetchOptions }
     );
     let repos: GitHubRepo[] = [];
@@ -205,7 +205,7 @@ export async function fetchGitHubDashboardData(
       `https://api.github.com/users/${encodeURIComponent(username)}/events/public?per_page=60`,
       {
         headers,
-        ...(forceRefresh ? { cache: 'no-store' } : { next: { revalidate: 300 } }),
+        ...(forceRefresh ? { cache: 'no-store' } : { next: { revalidate: 60 } }),
       }
     );
     let recentEvents: GitHubEvent[] = [];

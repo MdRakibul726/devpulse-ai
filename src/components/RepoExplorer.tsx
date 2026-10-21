@@ -14,6 +14,7 @@ import {
   ShieldAlert,
   Tag,
   X,
+  Globe,
 } from 'lucide-react';
 import { GitHubRepo } from '@/lib/schemas';
 import { formatNumber, timeAgo, getLanguageColor } from '@/lib/utils';
@@ -35,7 +36,7 @@ export function RepoExplorer({
 }: RepoExplorerProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLanguage, setSelectedLanguage] = useState<string>('All');
-  const [sortBy, setSortBy] = useState<'stars' | 'forks' | 'updated'>('stars');
+  const [sortBy, setSortBy] = useState<'stars' | 'forks' | 'updated'>('updated');
   const [hideForks, setHideForks] = useState(false);
 
   // Available unique languages
@@ -63,8 +64,17 @@ export function RepoExplorer({
         return true;
       })
       .sort((a, b) => {
-        if (sortBy === 'stars') return (b.stargazers_count || 0) - (a.stargazers_count || 0);
-        if (sortBy === 'forks') return (b.forks_count || 0) - (a.forks_count || 0);
+        if (sortBy === 'stars') {
+          const diff = (b.stargazers_count || 0) - (a.stargazers_count || 0);
+          if (diff !== 0) return diff;
+          // Tie-breaker: latest live/updated repo first
+          return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+        }
+        if (sortBy === 'forks') {
+          const diff = (b.forks_count || 0) - (a.forks_count || 0);
+          if (diff !== 0) return diff;
+          return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
+        }
         if (sortBy === 'updated') {
           return new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime();
         }
@@ -122,9 +132,9 @@ export function RepoExplorer({
               onChange={(e) => setSortBy(e.target.value as any)}
               className="h-9 px-2.5 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-100/70 dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer"
             >
+              <option value="updated">Recently Updated (Live)</option>
               <option value="stars">Most Stars</option>
               <option value="forks">Most Forks</option>
-              <option value="updated">Recently Updated</option>
             </select>
           </div>
 
@@ -170,9 +180,11 @@ export function RepoExplorer({
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {filteredRepos.map((repo) => {
+          {filteredRepos.map((repo, repoIndex) => {
             const hasLicense = Boolean(repo.license?.name || repo.license?.spdx_id);
             const hasDescription = Boolean(repo.description && repo.description.trim().length > 0);
+            const isLiveActive = repoIndex === 0 || (new Date().getTime() - new Date(repo.updated_at).getTime() < 14 * 24 * 60 * 60 * 1000);
+            const hasHomepage = Boolean(repo.homepage && repo.homepage.startsWith('http'));
 
             return (
               <div
@@ -193,6 +205,24 @@ export function RepoExplorer({
                           <span className="truncate">{repo.name}</span>
                           <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-zinc-400" />
                         </a>
+                        {isLiveActive && !repo.archived && !repo.fork && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-mono font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.2 rounded-full shadow-xs">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                            <span>Live</span>
+                          </span>
+                        )}
+                        {hasHomepage && (
+                          <a
+                            href={repo.homepage!}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[10px] font-medium text-cyan-600 dark:text-cyan-400 bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/20 px-1.5 py-0.2 rounded-md transition-colors"
+                            title={`Live Site: ${repo.homepage}`}
+                          >
+                            <Globe className="w-3 h-3" />
+                            <span>Demo</span>
+                          </a>
+                        )}
                         {repo.fork && (
                           <Badge variant="secondary" className="text-[10px] py-0 px-1.5">
                             Fork
@@ -293,6 +323,18 @@ export function RepoExplorer({
 
                   {/* Contextual Action Buttons */}
                   <div className="flex items-center gap-1">
+                    {hasHomepage && (
+                      <a
+                        href={repo.homepage!}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-2 py-1 rounded-md text-[11px] font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors flex items-center gap-1 cursor-pointer"
+                        title={`Open live site: ${repo.homepage}`}
+                      >
+                        <Globe className="w-3 h-3" />
+                        <span>Site</span>
+                      </a>
+                    )}
                     {onSelectRepoForHealth && (
                       <button
                         type="button"
