@@ -9,8 +9,7 @@ import {
   Tag,
   AlertCircle,
   RefreshCw,
-  Github,
-  Search,
+  ArrowRight,
 } from 'lucide-react';
 import { DashboardData } from '@/lib/schemas';
 import { Header } from '@/components/Header';
@@ -54,7 +53,7 @@ export default function Home() {
       setUsername(json.user?.login || userToFetch);
     } catch (err) {
       console.error('Fetch profile error:', err);
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred.');
+      setError(err instanceof Error ? err.message : 'An unexpected error occurred while communicating with GitHub.');
     } finally {
       setLoading(false);
     }
@@ -91,9 +90,9 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-zinc-50/80 dark:bg-[#08090d] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-indigo-500 selection:text-white">
+    <div className="relative min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] antialiased">
       {/* Ambient Lighting & Micro-Grid Atmosphere */}
-      <div className="fixed inset-0 bg-ambient-mesh bg-grid-subtle pointer-events-none -z-10" />
+      <div className="fixed inset-0 bg-ambient-glow bg-tech-grid pointer-events-none -z-10" />
 
       {/* Navigation Header */}
       <Header
@@ -104,31 +103,33 @@ export default function Home() {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-7">
         {/* Loading State Skeleton */}
         {loading && (
-          <div className="space-y-6">
-            <Skeleton className="h-48 w-full rounded-2xl" />
+          <div className="space-y-6 animate-in fade-in duration-300">
+            <Skeleton className="h-44 w-full rounded-3xl" />
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
               {Array.from({ length: 5 }).map((_, i) => (
-                <Skeleton key={i} className="h-28 rounded-xl" />
+                <Skeleton key={i} className="h-28 rounded-2xl" />
               ))}
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Skeleton className="h-80 rounded-xl" />
-              <Skeleton className="h-80 rounded-xl" />
+              <Skeleton className="h-80 rounded-2xl" />
+              <Skeleton className="h-80 rounded-2xl" />
             </div>
           </div>
         )}
 
         {/* Error State with fallback to demo */}
         {!loading && error && (
-          <div className="rounded-2xl border border-rose-500/30 bg-rose-500/10 p-8 text-center max-w-xl mx-auto my-12">
-            <AlertCircle className="w-12 h-12 text-rose-500 mx-auto mb-3" />
-            <h3 className="text-base font-bold text-rose-600 dark:text-rose-400">
-              Unable to load GitHub Profile
+          <div className="panel-surface specular-top rounded-3xl p-8 text-center max-w-lg mx-auto my-12 border border-rose-500/30">
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center mx-auto mb-3">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <h3 className="text-base font-bold text-zinc-950 dark:text-zinc-50">
+              Unable to Fetch GitHub Profile
             </h3>
-            <p className="text-xs text-rose-700/80 dark:text-rose-300/80 mt-1 mb-6 leading-relaxed">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1 mb-6 leading-relaxed">
               {error}
             </p>
             <div className="flex items-center justify-center gap-3">
@@ -139,7 +140,7 @@ export default function Home() {
                 className="gap-1.5"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
-                Retry
+                <span>Retry</span>
               </Button>
               <Button
                 size="sm"
@@ -147,7 +148,7 @@ export default function Home() {
                 className="gap-1.5"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                Load Demo Profile
+                <span>Load Demo Profile</span>
               </Button>
             </div>
           </div>
@@ -155,7 +156,7 @@ export default function Home() {
 
         {/* Profile Content */}
         {!loading && !error && data && (
-          <div>
+          <div className="animate-in fade-in duration-300">
             {/* Rate Limit Banner */}
             <RateLimitBanner
               rateLimit={data.rateLimit}
@@ -175,31 +176,31 @@ export default function Home() {
               <TabsList className="mb-6">
                 <TabsTrigger
                   value="overview"
-                  icon={<Activity className="w-4 h-4 text-indigo-500" />}
+                  icon={<Activity className="w-3.5 h-3.5 text-indigo-500" />}
                 >
                   Overview & Analytics
                 </TabsTrigger>
                 <TabsTrigger
                   value="repos"
-                  icon={<FolderGit2 className="w-4 h-4 text-cyan-500" />}
+                  icon={<FolderGit2 className="w-3.5 h-3.5 text-cyan-500" />}
                 >
                   Repositories ({data.repos.length})
                 </TabsTrigger>
                 <TabsTrigger
                   value="health"
-                  icon={<ShieldCheck className="w-4 h-4 text-emerald-500" />}
+                  icon={<ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />}
                 >
-                  Health Analyzer
+                  Health Audit
                 </TabsTrigger>
                 <TabsTrigger
                   value="copilot"
-                  icon={<Sparkles className="w-4 h-4 text-amber-500" />}
+                  icon={<Sparkles className="w-3.5 h-3.5 text-amber-500" />}
                 >
                   AI Career Copilot
                 </TabsTrigger>
                 <TabsTrigger
                   value="cards"
-                  icon={<Tag className="w-4 h-4 text-purple-500" />}
+                  icon={<Tag className="w-3.5 h-3.5 text-purple-500" />}
                 >
                   README Cards
                 </TabsTrigger>
@@ -226,20 +227,21 @@ export default function Home() {
                 <div className="mt-8">
                   <div className="flex items-center justify-between mb-4">
                     <div>
-                      <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
+                      <h3 className="text-base font-bold tracking-tight text-zinc-950 dark:text-zinc-50">
                         Top Starred Repositories
                       </h3>
                       <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                        Most popular projects by community engagement
+                        Most popular open projects by community engagement
                       </p>
                     </div>
                     <Button
                       variant="outline"
-                      size="sm"
+                      size="xs"
                       onClick={() => setActiveTab('repos')}
-                      className="text-xs"
+                      className="gap-1.5"
                     >
-                      View All {data.repos.length} Repositories
+                      <span>View All ({data.repos.length})</span>
+                      <ArrowRight className="w-3 h-3" />
                     </Button>
                   </div>
 
@@ -289,7 +291,7 @@ export default function Home() {
         )}
       </main>
 
-      {/* Branded DevPulse Indicator (Custom DevTools) */}
+      {/* Branded DevPulse Diagnostics Indicator */}
       <DevPulseIndicator
         rateLimit={data?.rateLimit}
         isDemo={data?.isDemo}
@@ -297,17 +299,17 @@ export default function Home() {
       />
 
       {/* Footer */}
-      <footer className="w-full border-t border-zinc-200/80 dark:border-white/[0.07] py-8 bg-white/40 dark:bg-[#07090e]/70 backdrop-blur-xl text-xs text-zinc-500 dark:text-zinc-400 mt-16">
+      <footer className="w-full border-t border-zinc-200/80 dark:border-white/[0.06] py-8 bg-white/50 dark:bg-[#07090e]/60 backdrop-blur-xl text-xs text-zinc-500 dark:text-zinc-400 mt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-600 to-cyan-400 text-white flex items-center justify-center shadow-xs">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-b from-indigo-500 to-indigo-700 text-white flex items-center justify-center shadow-xs">
               <Activity className="w-3.5 h-3.5" />
             </div>
-            <span className="font-bold text-zinc-800 dark:text-zinc-200 tracking-tight">
+            <span className="font-bold text-zinc-900 dark:text-zinc-100 tracking-tight">
               DevPulse AI
             </span>
-            <span className="text-zinc-400 dark:text-zinc-600">—</span>
-            <span className="hidden sm:inline">GitHub Profile Intelligence & Career Copilot</span>
+            <span className="text-zinc-300 dark:text-zinc-700">—</span>
+            <span className="hidden sm:inline">GitHub Profile Analytics & Career Copilot</span>
           </div>
 
           <div className="flex items-center gap-4 text-[11px]">
@@ -315,8 +317,8 @@ export default function Home() {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>All Systems Operational</span>
             </div>
-            <span className="text-zinc-400 dark:text-zinc-600 hidden md:inline">•</span>
-            <span className="hidden md:inline text-zinc-400">Next.js 16 + React 19 + TypeScript + Tailwind v4</span>
+            <span className="text-zinc-300 dark:text-zinc-700 hidden md:inline">•</span>
+            <span className="hidden md:inline text-zinc-400 font-mono">Next.js 16 + React 19 + TypeScript</span>
           </div>
         </div>
       </footer>

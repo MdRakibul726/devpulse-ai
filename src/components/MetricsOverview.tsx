@@ -1,9 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Star, GitFork, Code2, GitCommit, FolderGit } from 'lucide-react';
+import { Star, GitFork, Code2, GitCommit, FolderGit, TrendingUp } from 'lucide-react';
 import { formatNumber, getLanguageColor } from '@/lib/utils';
-import { Card, CardContent } from './ui/card';
 
 interface MetricsOverviewProps {
   totalStars: number;
@@ -27,8 +26,8 @@ export function MetricsOverview({
       rawValue: totalStars,
       icon: Star,
       iconColor: 'text-amber-500',
-      bgColor: 'bg-amber-500/10',
-      description: 'Across all public repositories',
+      tag: 'Reputation',
+      description: 'Community appreciation',
     },
     {
       label: 'Total Forks',
@@ -36,8 +35,8 @@ export function MetricsOverview({
       rawValue: totalForks,
       icon: GitFork,
       iconColor: 'text-indigo-500',
-      bgColor: 'bg-indigo-500/10',
-      description: 'Community forks & adaptations',
+      tag: 'Ecosystem',
+      description: 'Downstream adaptations',
     },
     {
       label: 'Primary Stack',
@@ -45,8 +44,8 @@ export function MetricsOverview({
       isLanguage: true,
       icon: Code2,
       iconColor: 'text-cyan-500',
-      bgColor: 'bg-cyan-500/10',
-      description: 'Most frequent language',
+      tag: 'Core Skill',
+      description: 'Most frequent codebase',
     },
     {
       label: '30-Day Commits',
@@ -54,8 +53,8 @@ export function MetricsOverview({
       rawValue: recentCommitCount30d,
       icon: GitCommit,
       iconColor: 'text-emerald-500',
-      bgColor: 'bg-emerald-500/10',
-      description: 'Recent public commit velocity',
+      tag: 'Velocity',
+      description: 'Recent public pushes',
     },
     {
       label: 'Public Repos',
@@ -63,8 +62,8 @@ export function MetricsOverview({
       rawValue: totalRepos,
       icon: FolderGit,
       iconColor: 'text-purple-500',
-      bgColor: 'bg-purple-500/10',
-      description: 'Active projects indexed',
+      tag: 'Inventory',
+      description: 'Active open repositories',
     },
   ];
 
@@ -73,20 +72,17 @@ export function MetricsOverview({
       {metrics.map((m, idx) => {
         const Icon = m.icon;
         return (
-          <Card
+          <div
             key={idx}
-            className="relative overflow-hidden group hover:border-indigo-500/40 dark:hover:border-indigo-500/30 transition-all duration-300 shadow-sm hover:shadow-lg hover:shadow-indigo-500/5 cursor-default"
+            className="panel-surface specular-top panel-interactive rounded-2xl p-4 sm:p-5 flex flex-col justify-between"
           >
-            {/* Top Specular Line Accent */}
-            <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-white/20 dark:via-white/10 to-transparent group-hover:via-indigo-500/50 transition-colors" />
-
-            <CardContent className="p-4 sm:p-5">
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            <div>
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-[10px] sm:text-[11px] font-mono uppercase tracking-wider text-zinc-500 dark:text-zinc-400 font-medium">
                   {m.label}
                 </span>
-                <div className={`p-2 rounded-xl ${m.bgColor} ${m.iconColor} group-hover:scale-110 transition-transform duration-200 shadow-xs ring-1 ring-black/5 dark:ring-white/10`}>
-                  <Icon className="w-4 h-4" />
+                <div className={`p-1.5 rounded-lg bg-zinc-100 dark:bg-white/[0.05] ${m.iconColor}`}>
+                  <Icon className="w-3.5 h-3.5" />
                 </div>
               </div>
 
@@ -97,16 +93,18 @@ export function MetricsOverview({
                     style={{ backgroundColor: getLanguageColor(topLanguage) }}
                   />
                 )}
-                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 dark:text-white font-mono truncate">
+                <div className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 dark:text-white font-mono tabular-nums truncate">
                   {m.value}
                 </div>
               </div>
+            </div>
 
-              <p className="mt-1.5 text-[11px] text-zinc-500 dark:text-zinc-400 truncate font-medium">
+            <div className="mt-3 pt-2.5 border-t border-zinc-100 dark:border-white/[0.05] flex items-center justify-between text-[11px]">
+              <span className="text-zinc-500 dark:text-zinc-400 truncate">
                 {m.description}
-              </p>
-            </CardContent>
-          </Card>
+              </span>
+            </div>
+          </div>
         );
       })}
     </div>

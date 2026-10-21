@@ -5,7 +5,7 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
   return (
     <div
       className={cn(
-        'glass-panel glass-card-hover rounded-2xl transition-all duration-300',
+        'panel-surface specular-top panel-interactive rounded-2xl overflow-hidden',
         className
       )}
       {...props}
@@ -14,13 +14,13 @@ export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
 }
 
 export function CardHeader({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('flex flex-col space-y-1.5 p-5', className)} {...props} />;
+  return <div className={cn('flex flex-col space-y-1 p-5 sm:p-6', className)} {...props} />;
 }
 
 export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) {
   return (
     <h3
-      className={cn('text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100', className)}
+      className={cn('text-sm sm:text-base font-semibold tracking-tight text-zinc-900 dark:text-zinc-100', className)}
       {...props}
     />
   );
@@ -28,18 +28,18 @@ export function CardTitle({ className, ...props }: React.HTMLAttributes<HTMLHead
 
 export function CardDescription({ className, ...props }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
-    <p className={cn('text-xs text-zinc-500 dark:text-zinc-400', className)} {...props} />
+    <p className={cn('text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed', className)} {...props} />
   );
 }
 
 export function CardContent({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn('p-5 pt-0', className)} {...props} />;
+  return <div className={cn('p-5 sm:p-6 pt-0', className)} {...props} />;
 }
 
 export function CardFooter({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('flex items-center p-5 pt-0 border-t border-zinc-100 dark:border-zinc-800/50 mt-4', className)}
+      className={cn('flex items-center p-5 sm:p-6 pt-0 border-t border-zinc-100 dark:border-white/[0.06] mt-4', className)}
       {...props}
     />
   );

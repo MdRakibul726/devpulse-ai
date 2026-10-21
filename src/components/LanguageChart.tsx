@@ -10,7 +10,7 @@ import {
 } from 'recharts';
 import { LanguageDistributionItem } from '@/lib/schemas';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from './ui/card';
-import { Code } from 'lucide-react';
+import { Code2 } from 'lucide-react';
 
 interface LanguageChartProps {
   languages: LanguageDistributionItem[];
@@ -28,7 +28,7 @@ export function LanguageChart({ languages }: LanguageChartProps) {
       <Card className="h-full">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Code className="w-4 h-4 text-indigo-500" />
+            <Code2 className="w-4 h-4 text-indigo-500" />
             Language Distribution
           </CardTitle>
           <CardDescription>Primary languages across public repositories</CardDescription>
@@ -43,7 +43,7 @@ export function LanguageChart({ languages }: LanguageChartProps) {
   // Top 5 languages + "Other" bucket if > 5
   const topLanguages = languages.slice(0, 5);
   const remaining = languages.slice(5);
-  let chartData = [...topLanguages];
+  const chartData = [...topLanguages];
 
   if (remaining.length > 0) {
     const otherCount = remaining.reduce((sum, item) => sum + item.count, 0);
@@ -57,21 +57,23 @@ export function LanguageChart({ languages }: LanguageChartProps) {
   }
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className="h-full flex flex-col justify-between">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Code className="w-4 h-4 text-indigo-500" />
+            <Code2 className="w-4 h-4 text-indigo-500" />
             Language Distribution
           </CardTitle>
-          <span className="text-[11px] font-medium text-zinc-400">
-            {languages.length} {languages.length === 1 ? 'language' : 'languages'} detected
+          <span className="text-[11px] font-mono text-zinc-500 dark:text-zinc-400 px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-white/[0.05] border border-zinc-200/60 dark:border-white/[0.06]">
+            {languages.length} {languages.length === 1 ? 'stack' : 'stacks'}
           </span>
         </div>
-        <CardDescription>Breakdown based on primary repository language</CardDescription>
+        <CardDescription>Breakdown based on primary repository codebase</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 flex flex-col justify-between">
-        <div className="h-56 w-full">
+
+      <CardContent className="flex-1 flex flex-col justify-between pt-0">
+        {/* Recharts Donut */}
+        <div className="h-52 w-full relative flex items-center justify-center">
           {isMounted ? (
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -79,13 +81,18 @@ export function LanguageChart({ languages }: LanguageChartProps) {
                   data={chartData}
                   cx="50%"
                   cy="50%"
-                  innerRadius={55}
-                  outerRadius={80}
-                  paddingAngle={3}
+                  innerRadius={58}
+                  outerRadius={82}
+                  paddingAngle={2}
                   dataKey="count"
+                  stroke="none"
                 >
                   {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.color}
+                      className="transition-opacity hover:opacity-85"
+                    />
                   ))}
                 </Pie>
                 <Tooltip
@@ -93,21 +100,27 @@ export function LanguageChart({ languages }: LanguageChartProps) {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload as LanguageDistributionItem;
                       return (
-                        <div className="rounded-2xl border border-zinc-200/90 dark:border-white/10 bg-white/95 dark:bg-[#0c0e17]/95 p-3.5 shadow-2xl text-xs backdrop-blur-xl ring-1 ring-black/5">
-                          <div className="flex items-center gap-2.5 font-bold text-zinc-900 dark:text-zinc-100">
+                        <div className="rounded-xl border border-zinc-200/90 dark:border-white/10 bg-white/95 dark:bg-[#0e111a]/95 p-3 shadow-xl text-xs backdrop-blur-xl ring-1 ring-black/5 min-w-[150px]">
+                          <div className="flex items-center gap-2 font-semibold text-zinc-900 dark:text-zinc-100 mb-1.5">
                             <span
-                              className="w-3 h-3 rounded-full shadow-xs shrink-0"
+                              className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
                               style={{ backgroundColor: data.color }}
                             />
                             <span>{data.name}</span>
                           </div>
-                          <div className="mt-1.5 flex items-center justify-between gap-4 text-zinc-500 dark:text-zinc-400 font-medium">
-                            <span>Share:</span>
-                            <span className="font-mono font-bold text-zinc-900 dark:text-zinc-100">{data.percentage}%</span>
-                          </div>
-                          <div className="flex items-center justify-between gap-4 text-zinc-500 dark:text-zinc-400 font-medium">
-                            <span>Repositories:</span>
-                            <span className="font-mono font-bold text-indigo-500">{data.count} repos</span>
+                          <div className="space-y-1 text-zinc-500 dark:text-zinc-400 text-[11px]">
+                            <div className="flex items-center justify-between">
+                              <span>Share:</span>
+                              <strong className="font-mono text-zinc-900 dark:text-zinc-100 tabular-nums">
+                                {data.percentage}%
+                              </strong>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span>Repositories:</span>
+                              <strong className="font-mono text-indigo-500 tabular-nums">
+                                {data.count}
+                              </strong>
+                            </div>
                           </div>
                         </div>
                       );
@@ -119,27 +132,44 @@ export function LanguageChart({ languages }: LanguageChartProps) {
             </ResponsiveContainer>
           ) : (
             <div className="h-full w-full flex items-center justify-center">
-              <div className="w-28 h-28 rounded-full border-4 border-indigo-500/20 animate-pulse" />
+              <div className="w-24 h-24 rounded-full border-2 border-indigo-500/20 border-t-indigo-500 animate-spin" />
             </div>
           )}
         </div>
 
-        {/* Legend list */}
-        <div className="mt-4 pt-3.5 border-t border-zinc-100 dark:border-white/[0.06] grid grid-cols-2 gap-2 text-xs">
+        {/* Language Breakdown with Progress Bars */}
+        <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-white/[0.06] space-y-2">
           {chartData.map((item) => (
-            <div key={item.name} className="flex items-center justify-between p-2 rounded-xl hover:bg-zinc-100/70 dark:hover:bg-white/[0.04] border border-transparent hover:border-zinc-200/60 dark:hover:border-white/[0.06] transition-all">
-              <div className="flex items-center gap-2.5 truncate">
-                <span
-                  className="w-2.5 h-2.5 rounded-full shrink-0 shadow-xs"
-                  style={{ backgroundColor: item.color }}
-                />
-                <span className="text-zinc-700 dark:text-zinc-300 font-semibold truncate">
-                  {item.name}
-                </span>
+            <div key={item.name} className="group text-xs">
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2 truncate">
+                  <span
+                    className="w-2 h-2 rounded-full shrink-0 shadow-xs"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  <span className="text-zinc-700 dark:text-zinc-300 font-medium truncate">
+                    {item.name}
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-zinc-400 text-[11px] font-mono">
+                    {item.count} {item.count === 1 ? 'repo' : 'repos'}
+                  </span>
+                  <span className="text-zinc-900 dark:text-zinc-100 font-mono text-[11px] font-semibold tabular-nums min-w-[32px] text-right">
+                    {item.percentage}%
+                  </span>
+                </div>
               </div>
-              <span className="text-zinc-500 dark:text-zinc-400 font-mono text-[11px] font-bold shrink-0 ml-2 px-1.5 py-0.5 rounded-md bg-zinc-100 dark:bg-white/[0.06]">
-                {item.percentage}%
-              </span>
+              {/* Progress bar track */}
+              <div className="h-1.5 w-full bg-zinc-100 dark:bg-white/[0.06] rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${item.percentage}%`,
+                    backgroundColor: item.color,
+                  }}
+                />
+              </div>
             </div>
           ))}
         </div>

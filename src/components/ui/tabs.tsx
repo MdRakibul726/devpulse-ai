@@ -38,7 +38,7 @@ export function TabsList({ className, children }: { className?: string; children
   return (
     <div
       className={cn(
-        'inline-flex h-12 items-center justify-start rounded-2xl bg-white/70 dark:bg-zinc-900/70 p-1.5 text-zinc-500 dark:text-zinc-400 border border-zinc-200/80 dark:border-white/[0.08] backdrop-blur-xl shadow-sm overflow-x-auto max-w-full gap-1',
+        'inline-flex h-11 items-center justify-start rounded-xl bg-zinc-200/60 dark:bg-white/[0.04] p-1 text-zinc-500 dark:text-zinc-400 border border-zinc-200/80 dark:border-white/[0.06] backdrop-blur-md overflow-x-auto max-w-full gap-1 scrollbar-none',
         className
       )}
     >
@@ -67,14 +67,14 @@ export function TabsTrigger({
       type="button"
       onClick={() => ctx.onValueChange(value)}
       className={cn(
-        'inline-flex items-center justify-center whitespace-nowrap rounded-xl px-4 py-2 text-xs font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-50 gap-2 cursor-pointer select-none',
+        'group inline-flex items-center justify-center whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 disabled:pointer-events-none disabled:opacity-50 gap-2 cursor-pointer select-none tracking-tight',
         isActive
-          ? 'bg-white dark:bg-zinc-800 text-zinc-950 dark:text-white shadow-md shadow-zinc-950/5 dark:shadow-indigo-500/10 font-semibold border border-zinc-200/80 dark:border-white/10 scale-[1.02]'
-          : 'hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100/80 dark:hover:bg-zinc-800/50',
+          ? 'bg-white dark:bg-white/[0.1] text-zinc-950 dark:text-white shadow-xs font-semibold border border-black/5 dark:border-white/[0.1]'
+          : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-black/[0.03] dark:hover:bg-white/[0.04]',
         className
       )}
     >
-      {icon && <span className="w-4 h-4 shrink-0 transition-transform group-hover:scale-110">{icon}</span>}
+      {icon && <span className={cn('w-3.5 h-3.5 shrink-0 transition-opacity', isActive ? 'opacity-100' : 'opacity-70 group-hover:opacity-100')}>{icon}</span>}
       <span>{children}</span>
     </button>
   );
@@ -93,5 +93,13 @@ export function TabsContent({
   if (!ctx) throw new Error('TabsContent must be within Tabs');
   if (ctx.value !== value) return null;
 
-  return <div className={cn('mt-4 focus-visible:outline-none', className)}>{children}</div>;
+  return (
+    <div
+      role="tabpanel"
+      tabIndex={0}
+      className={cn('mt-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 rounded-xl', className)}
+    >
+      {children}
+    </div>
+  );
 }

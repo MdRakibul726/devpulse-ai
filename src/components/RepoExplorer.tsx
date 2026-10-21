@@ -4,7 +4,6 @@ import React, { useState, useMemo } from 'react';
 import {
   Star,
   GitFork,
-  AlertCircle,
   ExternalLink,
   Search,
   Filter,
@@ -14,10 +13,10 @@ import {
   ShieldCheck,
   ShieldAlert,
   Tag,
+  X,
 } from 'lucide-react';
 import { GitHubRepo } from '@/lib/schemas';
 import { formatNumber, timeAgo, getLanguageColor } from '@/lib/utils';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
@@ -76,28 +75,36 @@ export function RepoExplorer({
   return (
     <div className="space-y-4">
       {/* Controls Bar */}
-      <div className="glass-panel rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3.5 shadow-sm">
+      <div className="panel-surface specular-top rounded-2xl p-4 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search */}
         <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 pointer-events-none" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search repositories, topics, or descriptions..."
-            className="w-full h-10 pl-10 pr-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-zinc-900/80 text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 shadow-xs"
+            placeholder="Search projects, topics, or stack..."
+            className="w-full h-9 pl-9 pr-8 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-100/70 dark:bg-white/[0.04] text-xs text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
           />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 p-0.5"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2">
           {/* Language filter */}
-          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
             <Filter className="w-3.5 h-3.5 text-indigo-500 shrink-0" />
             <select
               value={selectedLanguage}
               onChange={(e) => setSelectedLanguage(e.target.value)}
-              className="h-10 px-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-zinc-900/80 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer shadow-xs"
+              className="h-9 px-2.5 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-100/70 dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer"
             >
               {availableLanguages.map((lang) => (
                 <option key={lang} value={lang}>
@@ -108,12 +115,12 @@ export function RepoExplorer({
           </div>
 
           {/* Sort By */}
-          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 font-medium">
+          <div className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
             <ArrowUpDown className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as any)}
-              className="h-10 px-3 rounded-xl border border-zinc-200 dark:border-white/10 bg-white/80 dark:bg-zinc-900/80 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer shadow-xs"
+              className="h-9 px-2.5 rounded-xl border border-zinc-200 dark:border-white/10 bg-zinc-100/70 dark:bg-zinc-900 text-xs text-zinc-900 dark:text-zinc-100 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500/40 cursor-pointer"
             >
               <option value="stars">Most Stars</option>
               <option value="forks">Most Forks</option>
@@ -122,12 +129,12 @@ export function RepoExplorer({
           </div>
 
           {/* Hide Forks Checkbox */}
-          <label className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400 font-medium cursor-pointer select-none ml-1 px-2.5 py-2 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800/50 transition-colors">
+          <label className="flex items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400 font-medium cursor-pointer select-none px-2 py-1.5 rounded-xl hover:bg-zinc-100 dark:hover:bg-white/[0.04] transition-colors">
             <input
               type="checkbox"
               checked={hideForks}
               onChange={(e) => setHideForks(e.target.checked)}
-              className="rounded-md border-zinc-300 dark:border-zinc-700 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5 cursor-pointer"
+              className="rounded border-zinc-300 dark:border-zinc-700 text-indigo-600 focus:ring-indigo-500 w-3.5 h-3.5 cursor-pointer"
             />
             <span>Hide forks</span>
           </label>
@@ -137,12 +144,13 @@ export function RepoExplorer({
       {/* Repositories Counter */}
       <div className="flex items-center justify-between px-1 text-xs text-zinc-500 dark:text-zinc-400">
         <span>
-          Showing <strong>{filteredRepos.length}</strong> of {repos.length} repositories
+          Showing <strong className="text-zinc-900 dark:text-zinc-100 font-mono">{filteredRepos.length}</strong> of{' '}
+          <span className="font-mono">{repos.length}</span> repositories
         </span>
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="text-indigo-500 hover:underline"
+            className="text-indigo-500 hover:underline cursor-pointer"
           >
             Clear filter
           </button>
@@ -151,15 +159,15 @@ export function RepoExplorer({
 
       {/* Repositories Grid */}
       {filteredRepos.length === 0 ? (
-        <Card className="p-12 text-center">
+        <div className="panel-surface rounded-2xl p-12 text-center">
           <BookOpen className="w-8 h-8 text-zinc-400 mx-auto mb-2" />
-          <h4 className="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+          <h4 className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
             No matching repositories found
           </h4>
           <p className="text-xs text-zinc-400 mt-1">
-            Try adjusting your search filters or language selection.
+            Try adjusting your search query or language filter.
           </p>
-        </Card>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filteredRepos.map((repo) => {
@@ -167,11 +175,12 @@ export function RepoExplorer({
             const hasDescription = Boolean(repo.description && repo.description.trim().length > 0);
 
             return (
-              <Card
+              <div
                 key={repo.id}
-                className="flex flex-col justify-between hover:border-zinc-300 dark:hover:border-zinc-700 transition-all group"
+                className="panel-surface specular-top panel-interactive rounded-2xl p-5 flex flex-col justify-between group"
               >
-                <CardHeader className="p-4 sm:p-5 pb-3">
+                <div>
+                  {/* Header Row: Title + Stats */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -179,10 +188,10 @@ export function RepoExplorer({
                           href={repo.html_url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-semibold text-sm sm:text-base text-zinc-900 dark:text-zinc-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors truncate flex items-center gap-1.5"
+                          className="font-bold text-sm sm:text-base text-zinc-900 dark:text-zinc-100 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors truncate flex items-center gap-1.5"
                         >
                           <span className="truncate">{repo.name}</span>
-                          <ExternalLink className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                          <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity shrink-0 text-zinc-400" />
                         </a>
                         {repo.fork && (
                           <Badge variant="secondary" className="text-[10px] py-0 px-1.5">
@@ -196,7 +205,7 @@ export function RepoExplorer({
                         )}
                       </div>
 
-                      <p className="mt-1.5 text-xs text-zinc-600 dark:text-zinc-300 line-clamp-2 leading-relaxed">
+                      <p className="mt-1.5 text-xs text-zinc-600 dark:text-zinc-300 line-clamp-2 leading-relaxed font-normal">
                         {hasDescription ? (
                           repo.description
                         ) : (
@@ -206,108 +215,120 @@ export function RepoExplorer({
                         )}
                       </p>
                     </div>
+
+                    {/* Star & Fork Counters */}
+                    <div className="flex items-center gap-2 shrink-0 text-xs">
+                      <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-100 dark:bg-white/[0.05] text-zinc-700 dark:text-zinc-300">
+                        <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+                        <span className="font-mono font-semibold tabular-nums">
+                          {formatNumber(repo.stargazers_count)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-zinc-100 dark:bg-white/[0.05] text-zinc-600 dark:text-zinc-400">
+                        <GitFork className="w-3 h-3 text-zinc-400" />
+                        <span className="font-mono tabular-nums">
+                          {formatNumber(repo.forks_count)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Topics */}
+                  {/* Topics Chips */}
                   {repo.topics && repo.topics.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-3">
                       {repo.topics.slice(0, 4).map((topic) => (
                         <span
                           key={topic}
-                          className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium"
+                          className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-white/[0.05] text-zinc-600 dark:text-zinc-400 border border-zinc-200/60 dark:border-white/[0.05]"
                         >
                           #{topic}
                         </span>
                       ))}
                       {repo.topics.length > 4 && (
-                        <span className="text-[10px] text-zinc-400 self-center">
-                          +{repo.topics.length - 4} more
+                        <span className="text-[10px] text-zinc-400 self-center font-mono">
+                          +{repo.topics.length - 4}
                         </span>
                       )}
                     </div>
                   )}
-                </CardHeader>
+                </div>
 
-                <CardContent className="p-4 sm:p-5 pt-0">
-                  {/* Stats and Badges */}
-                  <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800/60 pt-3 flex-wrap gap-2">
-                    <div className="flex items-center gap-3">
-                      {/* Language */}
-                      {repo.language && (
-                        <div className="flex items-center gap-1.5 font-medium text-zinc-700 dark:text-zinc-300">
-                          <span
-                            className="w-2.5 h-2.5 rounded-full"
-                            style={{ backgroundColor: getLanguageColor(repo.language) }}
-                          />
-                          <span>{repo.language}</span>
-                        </div>
-                      )}
-
-                      {/* Stars */}
-                      <div className="flex items-center gap-1 hover:text-amber-500 transition-colors">
-                        <Star className="w-3.5 h-3.5 text-amber-500" />
-                        <span>{formatNumber(repo.stargazers_count)}</span>
+                {/* Footer Row: Language, License, Updated + Action Buttons */}
+                <div className="mt-4 pt-3 border-t border-zinc-100 dark:border-white/[0.06] flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400 flex-wrap gap-2">
+                  <div className="flex items-center gap-3">
+                    {/* Primary Language */}
+                    {repo.language && (
+                      <div className="flex items-center gap-1.5 font-medium text-zinc-700 dark:text-zinc-300">
+                        <span
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: getLanguageColor(repo.language) }}
+                        />
+                        <span>{repo.language}</span>
                       </div>
+                    )}
 
-                      {/* Forks */}
-                      <div className="flex items-center gap-1">
-                        <GitFork className="w-3.5 h-3.5 text-zinc-400" />
-                        <span>{formatNumber(repo.forks_count)}</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 text-[11px]">
-                      {hasLicense ? (
-                        <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400" title={`License: ${repo.license?.name}`}>
-                          <ShieldCheck className="w-3.5 h-3.5" />
-                          <span>{repo.license?.spdx_id || 'License'}</span>
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1 text-amber-500" title="Missing open-source license">
-                          <ShieldAlert className="w-3.5 h-3.5" />
-                          <span>No License</span>
-                        </span>
-                      )}
-                      <span>•</span>
-                      <span>Updated {timeAgo(repo.updated_at)}</span>
-                    </div>
-                  </div>
-
-                  {/* Quick Action Bar */}
-                  <div className="mt-3 pt-2.5 border-t border-dashed border-zinc-100 dark:border-zinc-800/60 flex items-center justify-end gap-1.5">
-                    {onSelectRepoForHealth && (
-                      <button
-                        onClick={() => onSelectRepoForHealth(repo.name)}
-                        className="text-[11px] font-medium px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-indigo-500/10 hover:text-indigo-500 text-zinc-600 dark:text-zinc-300 transition-colors flex items-center gap-1"
-                        title="Analyze health & recommendations"
+                    {/* License status */}
+                    {hasLicense ? (
+                      <span
+                        className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium text-[11px]"
+                        title={`License: ${repo.license?.name}`}
                       >
                         <ShieldCheck className="w-3 h-3" />
-                        Health
+                        <span>{repo.license?.spdx_id || 'License'}</span>
+                      </span>
+                    ) : (
+                      <span
+                        className="flex items-center gap-1 text-amber-500 font-medium text-[11px]"
+                        title="Missing open-source license"
+                      >
+                        <ShieldAlert className="w-3 h-3" />
+                        <span>No License</span>
+                      </span>
+                    )}
+
+                    <span className="text-zinc-400 text-[11px]">
+                      {timeAgo(repo.updated_at)}
+                    </span>
+                  </div>
+
+                  {/* Contextual Action Buttons */}
+                  <div className="flex items-center gap-1">
+                    {onSelectRepoForHealth && (
+                      <button
+                        type="button"
+                        onClick={() => onSelectRepoForHealth(repo.name)}
+                        className="px-2 py-1 rounded-md text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors flex items-center gap-1 cursor-pointer"
+                        title="Audit health & hygiene"
+                      >
+                        <ShieldCheck className="w-3 h-3" />
+                        <span>Health</span>
                       </button>
                     )}
                     {onSelectRepoForAI && (
                       <button
+                        type="button"
                         onClick={() => onSelectRepoForAI(repo.name)}
-                        className="text-[11px] font-medium px-2 py-1 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/20 transition-colors flex items-center gap-1"
+                        className="px-2 py-1 rounded-md text-[11px] font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-500/10 hover:bg-indigo-500/20 transition-colors flex items-center gap-1 cursor-pointer"
                         title="Generate CV bullet points & summary"
                       >
                         <Sparkles className="w-3 h-3" />
-                        AI Copilot
+                        <span>Copilot</span>
                       </button>
                     )}
                     {onSelectRepoForCard && (
                       <button
+                        type="button"
                         onClick={() => onSelectRepoForCard(repo.name)}
-                        className="text-[11px] font-medium px-2 py-1 rounded bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-600 dark:text-zinc-300 transition-colors flex items-center gap-1"
-                        title="Generate README card"
+                        className="px-2 py-1 rounded-md text-[11px] font-medium text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/[0.06] transition-colors flex items-center gap-1 cursor-pointer"
+                        title="Generate README badge"
                       >
                         <Tag className="w-3 h-3" />
-                        Badge
+                        <span>Card</span>
                       </button>
                     )}
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             );
           })}
         </div>
